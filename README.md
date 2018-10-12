@@ -6,6 +6,6 @@ advertisement library for Unity.
 * Unity2017.4.12f1(LTS)
 
 ## support advertisement 
-* admob
+* ~~admob~~ アカウント停止されたのでサポートしません.
 * UnityAds
 * charboost

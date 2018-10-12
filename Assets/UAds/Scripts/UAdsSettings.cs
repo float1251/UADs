@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UAdsSettings : ScriptableObject {
+public class UAdsSettings : ScriptableObject
+{
 
-    public string gameId;
+#if UNITY_ADS
+	public string androidGameId;
+	public string iOSGameId;
+	public string rewardVideoZoneId = "rewardedVideo";
+#endif
+
+
 }
