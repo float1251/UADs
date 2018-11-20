@@ -9,3 +9,8 @@ advertisement library for Unity.
 * ~~admob~~ アカウント停止されたのでサポートしません.
 * UnityAds
 * charboost
+
+## TODO
+- [ ] UnityEditor上での確認機能
+- [ ] テストシーンの作成
+- [ ] 実機での確認
