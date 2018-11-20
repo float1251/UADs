@@ -73,6 +73,7 @@ namespace UAds.Editor
 					var tmp = EditorGUILayout.ToggleLeft("Enable AdColony", enableAdColony);
 					if (tmp != enableAdColony) {
 						enableAdColony = tmp;
+						setting.enableAdcolony = enableAdColony;
 						if (enableAdColony) {
 							adcolonySymbol.SetDefine();
 						} else {
@@ -103,10 +104,10 @@ namespace UAds.Editor
 				EditorGUILayout.PrefixLabel(string.Format("appId", os));
 				setting.appId = EditorGUILayout.TextField(setting.appId);
 			}
-			using (new EditorGUILayout.HorizontalScope()) {
-				EditorGUILayout.PrefixLabel(string.Format("RewardZoneName", os));
-				setting.rewardZoneName = EditorGUILayout.TextField(setting.rewardZoneName);
-			}
+			// using (new EditorGUILayout.HorizontalScope()) {
+			// 	EditorGUILayout.PrefixLabel(string.Format("RewardZoneName", os));
+			// 	setting.rewardZoneName = EditorGUILayout.TextField(setting.rewardZoneName);
+			// }
 			using (new EditorGUILayout.HorizontalScope()) {
 				EditorGUILayout.PrefixLabel(string.Format("RewardZoneID", os));
 				setting.rewardZoneId = EditorGUILayout.TextField(setting.rewardZoneId);

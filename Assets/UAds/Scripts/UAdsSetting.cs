@@ -15,13 +15,28 @@ namespace UAds
 			public string androidGameId;
 			public string iOSGameId;
 			public string rewardVideoZoneId = "rewardedVideo";
+
+			public string GameId
+			{
+				get
+				{
+#if UNITY_ANDROID
+					return androidGameId;
+#elif UNITY_IOS
+		return iOSGameId;
+#else
+		return "OTHER_PLATFORM";
+#endif
+				}
+			}
 		}
 
 		public UnityAdsSetting unityAds = new UnityAdsSetting();
 
 #endif
 
-#if ENABLE_ADCOLONY
+		public bool enableAdcolony;
+
 		[System.Serializable]
 		public class AdColoySetting
 		{
@@ -32,15 +47,23 @@ namespace UAds
 			public class Setting
 			{
 				public string appId;
-				public string rewardZoneName;
 				public string rewardZoneId;
 			}
-		}
-
-
-
-		public AdColoySetting adColony = new AdColoySetting();
+			public Setting GetSetting
+			{
+				get
+				{
+#if UNITY_ANDROID
+					return androidSetting;
+#elif UNITY_IOS
+        return iOSSetting;
+#else
+		return new Setting();
 #endif
+				}
+			}
+		}
+		public AdColoySetting adColony = new AdColoySetting();
 
 	}
 
