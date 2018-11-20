@@ -59,7 +59,9 @@ namespace UAds
 
 			if (setting.enableAdcolony) {
 				var adcolony = setting.adColony.GetSetting;
+#if ENABLE_ADCOLONY
 				_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
+#endif
 			}
 		}
 	}
