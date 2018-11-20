@@ -9,11 +9,13 @@ namespace UAds
 	{
 		private string gameId;
 		private bool isDebug;
+		private string rewardVideoZoneId;
 
-		public UADUnityAds(string gameId, bool isDebug)
+		public UADUnityAds(string gameId, string rewardVideoZoneId, bool isDebug)
 		{
 			this.gameId = gameId;
 			this.isDebug = isDebug;
+			this.rewardVideoZoneId = rewardVideoZoneId;
 		}
 
 		public void Initialize()
@@ -44,7 +46,7 @@ namespace UAds
 				return false;
 			}
 
-			Advertisement.Show("", new ShowOptions()
+			Advertisement.Show(this.rewardVideoZoneId, new ShowOptions()
 			{
 				resultCallback = (v) =>
 				{
