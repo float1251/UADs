@@ -18,7 +18,7 @@ namespace UAds
 		/// <returns><c>true</c>, if reward video ad was shown, <c>false</c> otherwise.</returns>
 		/// <param name="onFinish">On finish.</param>
 		bool ShowRewardVideoAd(OnFinishRewardVideo onFinish);
-		bool isReady();
+		bool IsReady();
 	}
 
 }

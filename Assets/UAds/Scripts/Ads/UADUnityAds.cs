@@ -21,7 +21,7 @@ namespace UAds
 			Advertisement.Initialize(gameId, isDebug);
 		}
 
-		public bool isReady()
+		public bool IsReady()
 		{
 			return Advertisement.isInitialized && Advertisement.IsReady();
 		}
