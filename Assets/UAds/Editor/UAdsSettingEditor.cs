@@ -36,7 +36,6 @@ namespace UAds.Editor
 			if (EditorApplication.isCompiling)
 				EditorGUILayout.LabelField("compiling...");
 
-
 #if UNITY_ADS
 			using (new EditorGUILayout.VerticalScope(GUI.skin.box)) {
 				EditorGUILayout.LabelField("UnityAds");
@@ -61,8 +60,16 @@ namespace UAds.Editor
 
 			EditorGUILayout.Space();
 			DisplayAdcolonyLayout(this.setting);
-
 			#endregion
+
+
+
+			using (new EditorGUILayout.HorizontalScope()) {
+				GUILayout.FlexibleSpace();
+				if (GUILayout.Button("Save")) {
+					UAdsSettingHelper.SaveUAdsSettings(setting);
+				}
+			}
 		}
 
 		private void DisplayAdcolonyLayout(UAdsSetting setting)

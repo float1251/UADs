@@ -11,6 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536c884e4bd504db2839f4c10d014ae8, type: 3}
   m_Name: UAdsSettings
   m_EditorClassIdentifier: 
-  androidGameId: 
-  iOSGameId: 
-  rewardVideoZoneId: rewardedVideo
+  unityAds:
+    androidGameId: 
+    iOSGameId: test
+    rewardVideoZoneId: rewardedVideo
+  enableAdcolony: 1
+  adColony:
+    androidSetting:
+      appId: aaa
+      rewardZoneId: bbb
+    iOSSetting:
+      appId: bbb
+      rewardZoneId: aaa

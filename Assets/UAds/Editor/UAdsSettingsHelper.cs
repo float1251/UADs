@@ -9,7 +9,6 @@ namespace UAds.Editor
 	{
 		public static UAdsSetting LoadOrCreateUAdsSettings()
 		{
-
 			var asset = AssetDatabase.LoadAssetAtPath<UAdsSetting>("Assets/UAds/UAdsSettings.asset");
 			if (asset != null) {
 				return asset;
@@ -22,7 +21,15 @@ namespace UAds.Editor
 			return asset;
 		}
 
+		public static void SaveUAdsSettings(UAdsSetting setting)
+		{
+			EditorUtility.SetDirty(setting);
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+		}
+
 		public static readonly string ADCOLONY_DEFINE = "ENABLE_ADCOLONY";
 	}
+
 
 }
