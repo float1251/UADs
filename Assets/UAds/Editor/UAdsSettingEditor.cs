@@ -14,7 +14,7 @@ namespace UAds.Editor
 
 		private BuildTargetGroup[] groups = new[] { BuildTargetGroup.Android, BuildTargetGroup.iOS };
 
-		[MenuItem("UAds/Show SettingWindow")]
+		[MenuItem("Tools/UAds/Show SettingWindow")]
 		public static void ShowWindow()
 		{
 
