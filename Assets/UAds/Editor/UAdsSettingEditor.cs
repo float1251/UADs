@@ -26,7 +26,7 @@ namespace UAds.Editor
 		private void OnEnable()
 		{
 			this.setting = UAdsSettingHelper.LoadOrCreateUAdsSettings();
-			this.adcolonySymbol = new ScriptDefineSymbol(groups, "ENABLE_ADCOLONY");
+			this.adcolonySymbol = new ScriptDefineSymbol(groups, UAdsSettingHelper.ADCOLONY_DEFINE);
 			this.enableAdColony = this.adcolonySymbol.HasDefine();
 		}
 
@@ -114,5 +114,4 @@ namespace UAds.Editor
 		}
 
 	}
-
 }

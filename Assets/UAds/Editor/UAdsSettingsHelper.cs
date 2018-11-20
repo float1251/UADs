@@ -22,7 +22,7 @@ namespace UAds.Editor
 			return asset;
 		}
 
-		private static readonly string ADCOLONY_DEFINE = "ENABLE_ADCOLONY";
+		public static readonly string ADCOLONY_DEFINE = "ENABLE_ADCOLONY";
 	}
 
 }

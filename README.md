@@ -3,7 +3,7 @@ advertisement library for Unity.
 
 ## support version
 
-* Unity2017.4.12f1(LTS)
+* Unity2018.2.14f1
 
 ## support advertisement 
 * ~~admob~~ アカウント停止されたのでサポートしません.

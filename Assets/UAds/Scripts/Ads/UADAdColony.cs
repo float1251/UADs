@@ -30,7 +30,10 @@ namespace UAds
 				DisableLogging = !isDebug,
 				TestModeEnabled = isDebug,
 			};
-			AdColony.Ads.Configure(appId, options, new[] { rewardZoneId });
+			this.appId = appId;
+			this.rewardZoneId = rewardZoneId;
+			this.isDebug = isDebug;
+			AdColony.Ads.Configure(this.appId, options, new[] { rewardZoneId });
 			AdColony.Ads.OnRequestInterstitial += Ads_OnRequestInterstitial;
 			AdColony.Ads.OnExpiring += Ads_OnExpiring;
 			AdColony.Ads.OnRewardGranted += Ads_OnRewardGranted;
@@ -87,7 +90,7 @@ namespace UAds
 
 		void Ads_OnRewardGranted(string zoneId, bool success, string rewardType, int quantity)
 		{
-			PrintDebug(string.Format("OnRewardGranted: {0}, {1}, {2}, {3}", zoneId, success, rewardType, quantity))
+			PrintDebug(string.Format("OnRewardGranted: {0}, {1}, {2}, {3}", zoneId, success, rewardType, quantity));
 			if (this.onFinish != null)
 				this.onFinish.Invoke(success ? VideoAdStatus.Success : VideoAdStatus.Fail);
 		}
