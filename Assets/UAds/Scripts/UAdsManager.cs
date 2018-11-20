@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -63,6 +64,29 @@ namespace UAds
 				_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
 #endif
 			}
+		}
+
+		public void Initialize()
+		{
+			this._ads.ForEach(v => v.Initialize());
+		}
+
+		public void IsReady()
+		{
+			this._ads.Any(v => v.IsReady());
+		}
+
+		public bool ShowRewardVideo(OnFinishRewardVideo onFinish)
+		{
+			foreach (var v in _ads) {
+				if (v.IsReady()) {
+					var res = v.ShowRewardVideoAd(onFinish);
+					if (res)
+						return true;
+				}
+			}
+			// 現在表示できるネットワークがない. cacheにのっていない可能性もあるので、しばらくしてから再度行うように案内するのが無難.
+			return false;
 		}
 	}
 }

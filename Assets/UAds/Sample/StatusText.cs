@@ -10,7 +10,9 @@ public class StatusText : MonoBehaviour
 
 	public void UpdateStatus(string text)
 	{
-		this.text.text = string.Format("Status: " + text);
+		var msg = string.Format("Status: " + text);
+		Debug.Log(msg);
+		this.text.text = msg;
 	}
 
 }
