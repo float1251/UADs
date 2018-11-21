@@ -8,18 +8,18 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1821197888576120}
-  m_IsPrefabAsset: 1
---- !u!1 &1821197888576120
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1877572338826596}
+  m_IsPrefabParent: 1
+--- !u!1 &1877572338826596
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
+  serializedVersion: 5
   m_Component:
-  - component: {fileID: 4286373847360610}
-  - component: {fileID: 114791294740028848}
+  - component: {fileID: 4139594689078882}
+  - component: {fileID: 114123426769762738}
   m_Layer: 0
   m_Name: UAdsManager
   m_TagString: Untagged
@@ -27,25 +27,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4286373847360610
+--- !u!4 &4139594689078882
 Transform:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1821197888576120}
+  m_GameObject: {fileID: 1877572338826596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 400, y: 1340, z: 0}
+  m_LocalPosition: {x: 837.18555, y: -497.70834, z: 25.339352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114791294740028848
+--- !u!114 &114123426769762738
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1821197888576120}
+  m_GameObject: {fileID: 1877572338826596}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2cbd483c116b400fb748cc0bef98fce, type: 3}
@@ -53,4 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setting: {fileID: 11400000, guid: 93eee8f5774fa472881a654eba2fe116, type: 2}
   isDebug: 1
-  initializeManually: 0
+  initializeManually: 1

@@ -18,7 +18,9 @@ namespace UAds.Sample
 		public void OnClickUnityAds()
 		{
 			status.UpdateStatus("UnityAds Initialzie");
+#if UNITY_ADS
 			this.ads = new UAds.UADUnityAds("", "", true);
+#endif
 		}
 
 

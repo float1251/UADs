@@ -72,7 +72,9 @@ namespace UAds
 				} else {
 
 					// 有効になっている動画広告の設定とInitializeを行う.
+#if UNITY_ADS
 					_ads.Add(new UADUnityAds(setting.unityAds.GameId, setting.unityAds.rewardVideoZoneId, isDebug));
+#endif
 
 					if (setting.enableAdcolony) {
 						var adcolony = setting.adColony.GetSetting;
