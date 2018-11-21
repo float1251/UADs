@@ -16,6 +16,7 @@ namespace UAds
 
 		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
 		{
+#if UNITY_EDITOR
 			var view = Object.FindObjectOfType<Editor.DummyAdView>();
 			if (view == null) {
 				var prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/UAds/Prefabs/Dev/RewardVideoCanvas.prefab");
@@ -24,8 +25,10 @@ namespace UAds
 			}
 
 			view.onFinish = onFinish;
-
 			return true;
+#else
+			return false;
+#endif
 		}
 	}
 }
