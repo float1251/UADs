@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unityAds:
     androidGameId: 
-    iOSGameId: test
+    iOSGameId: 
     rewardVideoZoneId: rewardedVideo
   enableAdcolony: 1
   adColony:

@@ -51,32 +51,47 @@ namespace UAds
 		[SerializeField]
 		bool isDebug;
 
+		[SerializeField]
+		bool initializeManually;
+
 		private List<IVideoAdvertisement> _ads = new List<IVideoAdvertisement>();
 
 		private void Start()
 		{
-			// 有効になっている動画広告の設定とInitializeを行う.
-			_ads.Add(new UADUnityAds(setting.unityAds.GameId, setting.unityAds.rewardVideoZoneId, isDebug));
-
-			if (setting.enableAdcolony) {
-				var adcolony = setting.adColony.GetSetting;
-#if ENABLE_ADCOLONY
-				_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
-#endif
-			}
+			if (!initializeManually)
+				Initialize();
 		}
 
 		public void Initialize()
 		{
+			if (_ads.Count() == 0) {
+
+				if (Application.isEditor) {
+					// Editor用の画面を表示する
+					_ads.Add(new UADDummyAd());
+				} else {
+
+					// 有効になっている動画広告の設定とInitializeを行う.
+					_ads.Add(new UADUnityAds(setting.unityAds.GameId, setting.unityAds.rewardVideoZoneId, isDebug));
+
+					if (setting.enableAdcolony) {
+						var adcolony = setting.adColony.GetSetting;
+#if ENABLE_ADCOLONY
+						_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
+#endif
+
+					}
+				}
+			}
 			this._ads.ForEach(v => v.Initialize());
 		}
 
-		public void IsReady()
+		public bool IsReady()
 		{
-			this._ads.Any(v => v.IsReady());
+			return this._ads.Any(v => v.IsReady());
 		}
 
-		public bool ShowRewardVideo(OnFinishRewardVideo onFinish)
+		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
 		{
 			foreach (var v in _ads) {
 				if (v.IsReady()) {

@@ -42,9 +42,12 @@ namespace UAds
 				return false;
 			}
 
+#if !UNITY_EDITOR
+            // Editor上では表示してないのでtrueが返るような...
 			if (!Advertisement.isShowing) {
 				return false;
 			}
+#endif
 
 			Advertisement.Show(this.rewardVideoZoneId, new ShowOptions()
 			{

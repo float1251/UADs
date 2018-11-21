@@ -53,3 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setting: {fileID: 11400000, guid: 93eee8f5774fa472881a654eba2fe116, type: 2}
   isDebug: 1
+  initializeManually: 0

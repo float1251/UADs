@@ -51,5 +51,29 @@ namespace UAds.Sample
 			});
 		}
 
+
+
+		public void OnClickManagerInitialize()
+		{
+			status.UpdateStatus("Initialize");
+			UAdsManager.Instance.Initialize();
+		}
+
+		public void OnClickManagerReady()
+		{
+			var res = UAdsManager.Instance.IsReady();
+			status.UpdateStatus("IsReady " + res);
+		}
+
+		public void OnClickManagerShowAds()
+		{
+			status.UpdateStatus("ShowAds");
+
+			UAdsManager.Instance.ShowRewardVideoAd((s) =>
+			{
+				status.UpdateStatus("Status: " + s);
+			});
+		}
+
 	}
 }
