@@ -9,13 +9,13 @@ namespace UAds
 	{
 		private string gameId;
 		private bool isDebug;
-		private string rewardVideoZoneId;
+		private string placementId;
 
-		public UADUnityAds(string gameId, string rewardVideoZoneId, bool isDebug)
+		public UADUnityAds(string gameId, string placementId, bool isDebug)
 		{
 			this.gameId = gameId;
 			this.isDebug = isDebug;
-			this.rewardVideoZoneId = rewardVideoZoneId;
+			this.placementId = placementId;
 		}
 
 		public void Initialize()
@@ -25,7 +25,7 @@ namespace UAds
 
 		public bool IsReady()
 		{
-			return Advertisement.isInitialized && Advertisement.IsReady();
+			return Advertisement.isInitialized && Advertisement.IsReady(this.placementId);
 		}
 
 		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
@@ -38,7 +38,7 @@ namespace UAds
 				return false;
 			}
 
-			if (!Advertisement.IsReady()) {
+			if (!Advertisement.IsReady(this.placementId)) {
 				return false;
 			}
 
@@ -48,8 +48,7 @@ namespace UAds
 				return false;
 			}
 #endif
-
-			Advertisement.Show(this.rewardVideoZoneId, new ShowOptions()
+			Advertisement.Show(this.placementId, new ShowOptions()
 			{
 				resultCallback = (v) =>
 				{

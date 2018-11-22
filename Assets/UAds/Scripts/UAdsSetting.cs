@@ -14,7 +14,7 @@ namespace UAds
 		{
 			public string androidGameId;
 			public string iOSGameId;
-			public string rewardVideoZoneId = "rewardedVideo";
+			public string rewardVideoPlacementId = "rewardedVideo";
 
 			public string GameId
 			{

@@ -50,7 +50,7 @@ namespace UAds.Editor
 					}
 					using (new EditorGUILayout.HorizontalScope()) {
 						EditorGUILayout.PrefixLabel("rewardVideoZoneId");
-						setting.unityAds.rewardVideoZoneId = EditorGUILayout.TextField(setting.unityAds.rewardVideoZoneId);
+						setting.unityAds.rewardVideoPlacementId = EditorGUILayout.TextField(setting.unityAds.rewardVideoPlacementId);
 					}
 				}
 			}
