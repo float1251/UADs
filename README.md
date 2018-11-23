@@ -7,8 +7,13 @@ advertisement library for Unity.
 
 ## support advertisement 
 * ~~admob~~ アカウント停止されたのでサポートしません.
-* UnityAds
-* charboost
+* UnityAds or Unity Monetization3.0
+* adcolony
+
+## 対応方法
+* UnityMonetizationに対応する場合はAsset Storeからダウンロード後、設定windowからenable Unity Monetizationにチェックを入れてください。
+
+* adcolonyはsdk内にあるpackageをimport後、proguardの設定を行ってください。
 
 ## TODO
 - [x] UnityEditor上での確認機能
