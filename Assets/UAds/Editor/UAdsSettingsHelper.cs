@@ -29,6 +29,7 @@ namespace UAds.Editor
 		}
 
 		public static readonly string ADCOLONY_DEFINE = "ENABLE_ADCOLONY";
+		public static readonly string UNITY_MONETIZATION = "UNITY_MONETIZATION";
 	}
 
 

@@ -19,7 +19,9 @@ namespace UAds.Sample
 		{
 			status.UpdateStatus("UnityAds Initialzie");
 #if UNITY_ADS
-			this.ads = new UAds.UADUnityAds("", "", true);
+			this.ads = new UAds.UADUnityAdsV2("", "", true);
+#elif UNITY_MONETIZATION
+			this.ads = new UAds.UAdUnityMonetization("", "", true);
 #endif
 		}
 

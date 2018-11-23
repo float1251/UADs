@@ -7,8 +7,9 @@ namespace UAds
 
 	public class UAdsSetting : ScriptableObject
 	{
+		public bool enableUnityMonetization = false;
 
-#if UNITY_ADS
+#if UNITY_ADS || UNITY_MONETIZATION
 		[System.Serializable]
 		public class UnityAdsSetting
 		{

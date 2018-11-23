@@ -551,8 +551,8 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    4: ENABLE_ADCOLONY
-    7: ENABLE_ADCOLONY
+    4: ENABLE_ADCOLONY;UNITY_MONETIZATION
+    7: ENABLE_ADCOLONY;UNITY_MONETIZATION
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

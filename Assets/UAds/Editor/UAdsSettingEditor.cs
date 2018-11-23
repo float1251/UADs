@@ -11,8 +11,9 @@ namespace UAds.Editor
 		private UAdsSetting setting;
 		private bool enableAdColony;
 		private ScriptDefineSymbol adcolonySymbol;
-
+		private ScriptDefineSymbol unityMonetizationSymbol;
 		private BuildTargetGroup[] groups = new[] { BuildTargetGroup.Android, BuildTargetGroup.iOS };
+		private bool enableUnityMonetization;
 
 		[MenuItem("Tools/UAds/Show SettingWindow")]
 		public static void ShowWindow()
@@ -27,6 +28,7 @@ namespace UAds.Editor
 		{
 			this.setting = UAdsSettingHelper.LoadOrCreateUAdsSettings();
 			this.adcolonySymbol = new ScriptDefineSymbol(groups, UAdsSettingHelper.ADCOLONY_DEFINE);
+			this.unityMonetizationSymbol = new ScriptDefineSymbol(groups, UAdsSettingHelper.UNITY_MONETIZATION);
 			this.enableAdColony = this.adcolonySymbol.HasDefine();
 		}
 
@@ -36,9 +38,22 @@ namespace UAds.Editor
 			if (EditorApplication.isCompiling)
 				EditorGUILayout.LabelField("compiling...");
 
-#if UNITY_ADS
 			using (new EditorGUILayout.VerticalScope(GUI.skin.box)) {
 				EditorGUILayout.LabelField("UnityAds");
+				var tmpEnableMonetization = EditorGUILayout.ToggleLeft("Enable unityMonetization", this.enableUnityMonetization);
+				if (tmpEnableMonetization != enableUnityMonetization) {
+					this.enableUnityMonetization = tmpEnableMonetization;
+					setting.enableUnityMonetization = enableUnityMonetization;
+					if (enableUnityMonetization) {
+						this.unityMonetizationSymbol.SetDefine();
+					} else {
+						unityMonetizationSymbol.RemoveDefine();
+					}
+					// defineを変更したのでconmpileさせる
+					AssetDatabase.Refresh();
+				}
+
+#if UNITY_ADS || UNITY_MONETIZATION
 				using (new EditorGUI.IndentLevelScope()) {
 					using (new EditorGUILayout.HorizontalScope()) {
 						EditorGUILayout.PrefixLabel("androidGameId");
@@ -52,17 +67,16 @@ namespace UAds.Editor
 						EditorGUILayout.PrefixLabel("rewardVideoZoneId");
 						setting.unityAds.rewardVideoPlacementId = EditorGUILayout.TextField(setting.unityAds.rewardVideoPlacementId);
 					}
+
+#endif
 				}
 			}
-#endif
 
 			#region AdColony
 
 			EditorGUILayout.Space();
 			DisplayAdcolonyLayout(this.setting);
 			#endregion
-
-
 
 			using (new EditorGUILayout.HorizontalScope()) {
 				GUILayout.FlexibleSpace();
