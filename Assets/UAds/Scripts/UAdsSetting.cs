@@ -5,6 +5,7 @@ using UnityEngine;
 namespace UAds
 {
 
+	[System.Serializable]
 	public class UAdsSetting : ScriptableObject
 	{
 		public bool enableUnityMonetization = false;

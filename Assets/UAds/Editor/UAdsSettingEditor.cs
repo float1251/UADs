@@ -30,6 +30,7 @@ namespace UAds.Editor
 			this.adcolonySymbol = new ScriptDefineSymbol(groups, UAdsSettingHelper.ADCOLONY_DEFINE);
 			this.unityMonetizationSymbol = new ScriptDefineSymbol(groups, UAdsSettingHelper.UNITY_MONETIZATION);
 			this.enableAdColony = this.adcolonySymbol.HasDefine();
+			this.enableUnityMonetization = this.unityMonetizationSymbol.HasDefine();
 		}
 
 		public void OnGUI()
@@ -40,7 +41,7 @@ namespace UAds.Editor
 
 			using (new EditorGUILayout.VerticalScope(GUI.skin.box)) {
 				EditorGUILayout.LabelField("UnityAds");
-				var tmpEnableMonetization = EditorGUILayout.ToggleLeft("Enable unityMonetization", this.enableUnityMonetization);
+				var tmpEnableMonetization = EditorGUILayout.ToggleLeft("Enable UnityMonetization", this.enableUnityMonetization);
 				if (tmpEnableMonetization != enableUnityMonetization) {
 					this.enableUnityMonetization = tmpEnableMonetization;
 					setting.enableUnityMonetization = enableUnityMonetization;
@@ -79,6 +80,15 @@ namespace UAds.Editor
 
 			using (new EditorGUILayout.HorizontalScope()) {
 				GUILayout.FlexibleSpace();
+				if (GUILayout.Button("Export")) {
+					var path = EditorUtility.SaveFilePanel("Export Json", Application.dataPath, "export_setting.json", "json");
+					UAdsSettingHelper.Export(path, JsonUtility.ToJson(setting));
+				}
+				if (GUILayout.Button("Import")) {
+					var path = EditorUtility.OpenFilePanel("Import Json", Application.dataPath, "json");
+					UAdsSettingHelper.Import(path, ref this.setting);
+					UAdsSettingHelper.SaveUAdsSettings(this.setting);
+				}
 				if (GUILayout.Button("Save")) {
 					UAdsSettingHelper.SaveUAdsSettings(setting);
 				}

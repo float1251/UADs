@@ -18,4 +18,5 @@ advertisement library for Unity.
 ## TODO
 - [x] UnityEditor上での確認機能
 - [x] テストシーンの作成
-- [ ] 実機での確認(ビルドはできたが、動画の確認はまだ.)
+- [x] 実機での確認(ビルドはできたが、動画の確認はまだ.)
+- [ ] proguardを有効にするとadcolonyの初期化に失敗する件の調査.

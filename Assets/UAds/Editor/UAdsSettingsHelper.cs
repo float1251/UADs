@@ -30,6 +30,21 @@ namespace UAds.Editor
 
 		public static readonly string ADCOLONY_DEFINE = "ENABLE_ADCOLONY";
 		public static readonly string UNITY_MONETIZATION = "UNITY_MONETIZATION";
+
+		public static void Export(string path, string json)
+		{
+			System.IO.File.WriteAllText(path, json);
+		}
+		public static void Import(string path, ref UAdsSetting setting)
+		{
+			var json = System.IO.File.ReadAllText(path);
+			if (json.Length == 0) {
+				return;
+			}
+			// https://docs.unity3d.com/Manual/JSONSerialization.html
+			// MonobehaviorやScriptableObjectはFromJsonOverwriteを使う必要がある模様.
+			JsonUtility.FromJsonOverwrite(json, setting);
+		}
 	}
 
 
