@@ -114,7 +114,7 @@ namespace UAds
 		private void PrintDebug(string message)
 		{
 			if (this.isDebug)
-				Debug.Log(message);
+				Debug.Log(string.Format("【AdColony】:{0}", message));
 		}
 	}
 }

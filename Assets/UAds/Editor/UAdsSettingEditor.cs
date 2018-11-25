@@ -67,9 +67,8 @@ namespace UAds.Editor
 						EditorGUILayout.PrefixLabel("rewardVideoZoneId");
 						setting.unityAds.rewardVideoPlacementId = EditorGUILayout.TextField(setting.unityAds.rewardVideoPlacementId);
 					}
-
-#endif
 				}
+#endif
 			}
 
 			#region AdColony

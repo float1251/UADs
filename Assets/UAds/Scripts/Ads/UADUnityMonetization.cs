@@ -18,7 +18,9 @@ namespace UAds
 		private ShowAdPlacementContent _ad;
 		public UAdUnityMonetization(string gameId, string placementId, bool testMode)
 		{
+			this.gameId = gameId;
 			this.placementId = placementId;
+			this.testMode = testMode;
 		}
 
 		public void Initialize()
@@ -27,6 +29,7 @@ namespace UAds
 			Monetization.onPlacementContentReady -= Monetization_OnPlacementContentReady;
 			Monetization.onPlacementContentStateChange += Monetization_OnPlacementContentStateChange;
 			Monetization.onPlacementContentReady += Monetization_OnPlacementContentReady;
+			// gameIdをちゃんと設定しないとtestModeすら動かない.ログも出ない模様.
 			Monetization.Initialize(gameId, testMode);
 		}
 
@@ -43,6 +46,12 @@ namespace UAds
 			}
 
 			if (_ad != null && _ad.ready) {
+
+				// 表示中の際はfalseで返す.
+				if (_ad.showing) {
+					return false;
+				}
+
 				_ad.Show((finishState) =>
 				{
 					VideoAdStatus status = VideoAdStatus.Cancel;

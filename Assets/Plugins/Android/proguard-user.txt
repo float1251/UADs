@@ -4,6 +4,9 @@
 }
 
 # Keep ADCNative class members unobfuscated
--keepclassmembers class com.adcolony.sdk.ADCNative** {
+# -keepclassmembers class com.adcolony.sdk.ADCNative** {
+# ADCNativeだと初期化がうまくいかないのがわかっているためsdk以下にしてみる.
+# だめでした。proguardを使用するとどうもうまく動作しない...
+-keepclassmembers class com.adcolony.sdk.** {
     *;
 }
