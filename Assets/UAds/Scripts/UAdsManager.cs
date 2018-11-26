@@ -57,7 +57,15 @@ namespace UAds
 
 		private List<IVideoAdvertisement> _ads = new List<IVideoAdvertisement>();
 
-        public bool randomize = false;
+		public bool randomize = false;
+
+		protected override void Awake()
+		{
+			var res = CheckInstance();
+			if (res) {
+				DontDestroyOnLoad(this.gameObject);
+			}
+		}
 
 		private void Start()
 		{
@@ -88,7 +96,7 @@ namespace UAds
 #endif
 					}
 				}
-			    this._ads.ForEach(v => v.Initialize());
+				this._ads.ForEach(v => v.Initialize());
 			}
 		}
 
@@ -99,10 +107,10 @@ namespace UAds
 
 		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
 		{
-            var adList = new List<IVideoAdvertisement>();
-            adList.AddRange(this._ads);
-            if (randomize)
-                adList.Shuffle();
+			var adList = new List<IVideoAdvertisement>();
+			adList.AddRange(this._ads);
+			if (randomize)
+				adList.Shuffle();
 
 			foreach (var v in adList) {
 				if (v.IsReady()) {
