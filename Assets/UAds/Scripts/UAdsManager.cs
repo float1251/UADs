@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UAds.Utils;
 
 namespace UAds
 {
@@ -56,6 +57,8 @@ namespace UAds
 
 		private List<IVideoAdvertisement> _ads = new List<IVideoAdvertisement>();
 
+        public bool randomize = false;
+
 		private void Start()
 		{
 			if (!initializeManually)
@@ -73,7 +76,7 @@ namespace UAds
 
 					// 有効になっている動画広告の設定とInitializeを行う.
 #if UNITY_ADS
-					_ads.Add(new UADUnityAdsV2(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId, isDebug))
+					_ads.Add(new UADUnityAdsV2(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId, isDebug));
 #elif UNITY_MONETIZATION
 					_ads.Add(new UAdUnityMonetization(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId, isDebug));
 #endif
@@ -83,11 +86,10 @@ namespace UAds
 #if ENABLE_ADCOLONY
 						_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
 #endif
-
 					}
 				}
+			    this._ads.ForEach(v => v.Initialize());
 			}
-			this._ads.ForEach(v => v.Initialize());
 		}
 
 		public bool IsReady()
@@ -97,7 +99,12 @@ namespace UAds
 
 		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
 		{
-			foreach (var v in _ads) {
+            var adList = new List<IVideoAdvertisement>();
+            adList.AddRange(this._ads);
+            if (randomize)
+                adList.Shuffle();
+
+			foreach (var v in adList) {
 				if (v.IsReady()) {
 					var res = v.ShowRewardVideoAd(onFinish);
 					if (res)
