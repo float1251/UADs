@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace UAds
 {
 
-	[System.Serializable]
+	[Serializable]
 	public class UAdsSetting : ScriptableObject
 	{
 		public bool enableUnityMonetization = false;
 
-#if UNITY_ADS || UNITY_MONETIZATION
-		[System.Serializable]
+		[Serializable]
 		public class UnityAdsSetting
 		{
 			public string androidGameId;
@@ -35,17 +33,16 @@ namespace UAds
 
 		public UnityAdsSetting unityAds = new UnityAdsSetting();
 
-#endif
 
 		public bool enableAdcolony;
 
-		[System.Serializable]
+		[Serializable]
 		public class AdColoySetting
 		{
 			public Setting androidSetting = new Setting();
 			public Setting iOSSetting = new Setting();
 
-			[System.Serializable]
+			[Serializable]
 			public class Setting
 			{
 				public string appId;
