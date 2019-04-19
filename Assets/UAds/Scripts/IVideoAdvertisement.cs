@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 
 namespace UAds
 {
 	public enum VideoAdStatus
 	{
+		AdNotReadyOrShowing,
 		Fail,
 		Success,
 		Cancel,
@@ -18,6 +20,8 @@ namespace UAds
 		/// <returns><c>true</c>, if reward video ad was shown, <c>false</c> otherwise.</returns>
 		/// <param name="onFinish">On finish.</param>
 		bool ShowRewardVideoAd(OnFinishRewardVideo onFinish);
+
+		IEnumerator ShowRewardVideoAsync(OnFinishRewardVideo onFinish);
 		bool IsReady();
 	}
 

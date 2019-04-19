@@ -16,7 +16,7 @@ MonoBehaviour:
     androidGameId: 
     iOSGameId: 
     rewardVideoPlacementId: rewardedVideo
-  enableAdcolony: 1
+  enableAdcolony: 0
   adColony:
     androidSetting:
       appId: 
