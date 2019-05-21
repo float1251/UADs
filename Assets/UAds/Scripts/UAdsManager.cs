@@ -55,8 +55,7 @@ namespace UAds
         [SerializeField]
         UAdsSetting setting;
 
-        [SerializeField]
-        bool isDebug;
+        public bool isDebug;
 
         [SerializeField]
         bool initializeManually;
