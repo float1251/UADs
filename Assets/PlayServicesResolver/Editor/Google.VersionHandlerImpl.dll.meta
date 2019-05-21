@@ -1,12 +1,14 @@
 fileFormatVersion: 2
-guid: 6d5eeb6b1612f4ade90021dd13122a03
+guid: 2b813b8207edd4102a27e16e59b0a0f2
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
   platformData:
   - first:
       Any: 

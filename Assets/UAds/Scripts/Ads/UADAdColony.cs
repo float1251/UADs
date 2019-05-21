@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 
@@ -47,6 +48,12 @@ namespace UAds
 				ShowPostPopup = false,
 				ShowPrePopup = false,
 			});
+		}
+
+		public IEnumerator ShowRewardVideoAsync(OnFinishRewardVideo onFinish)
+		{
+			ShowRewardVideoAd(onFinish);
+			yield return null;
 		}
 
 		public bool IsReady()

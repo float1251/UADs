@@ -9,6 +9,12 @@ namespace UAds
 		{
 		}
 
+		public IEnumerator ShowRewardVideoAsync(OnFinishRewardVideo onFinish)
+		{
+			yield return new WaitForSeconds(1f);
+			ShowRewardVideoAd(onFinish);
+		}
+
 		public bool IsReady()
 		{
 			return true;

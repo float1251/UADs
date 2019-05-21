@@ -551,11 +551,11 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    4: ENABLE_ADCOLONY;UNITY_MONETIZATION
-    7: ENABLE_ADCOLONY;UNITY_MONETIZATION
+    4: UNITY_MONETIZATION
+    7: UNITY_MONETIZATION
   platformArchitecture: {}
   scriptingBackend:
-    Android: 1
+    Android: 0
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 0

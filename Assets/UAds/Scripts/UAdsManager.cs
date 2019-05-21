@@ -1,118 +1,174 @@
-﻿using UnityEngine;
-using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UAds.Utils;
+using UnityEngine;
 
 namespace UAds
 {
-	public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
-	{
-		protected static T instance;
-		public static T Instance
-		{
-			get
-			{
-				if (instance == null) {
-					instance = (T)FindObjectOfType(typeof(T));
+    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
+    {
+        protected static T instance;
 
-					if (instance == null) {
-						Debug.LogWarning(typeof(T) + "is nothing");
-					}
-				}
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = (T) FindObjectOfType(typeof(T));
 
-				return instance;
-			}
-		}
+                    if (instance == null)
+                    {
+                        Debug.LogWarning(typeof(T) + "is nothing");
+                    }
+                }
 
-		virtual protected void Awake()
-		{
-			CheckInstance();
-		}
+                return instance;
+            }
+        }
 
-		protected bool CheckInstance()
-		{
-			if (instance == null) {
-				instance = (T)this;
-				return true;
-			} else if (Instance == this) {
-				return true;
-			}
+        virtual protected void Awake()
+        {
+            CheckInstance();
+        }
 
-			Destroy(this);
-			return false;
-		}
-	}
+        protected bool CheckInstance()
+        {
+            if (instance == null)
+            {
+                instance = (T) this;
+                return true;
+            }
+            else if (Instance == this)
+            {
+                return true;
+            }
 
-	public class UAdsManager : SingletonMonoBehaviour<UAdsManager>
-	{
-		[SerializeField]
-		UAdsSetting setting;
+            Destroy(this);
+            return false;
+        }
+    }
 
-		[SerializeField]
-		bool isDebug;
+    public class UAdsManager : SingletonMonoBehaviour<UAdsManager>
+    {
+        [SerializeField]
+        UAdsSetting setting;
 
-		[SerializeField]
-		bool initializeManually;
+        [SerializeField]
+        bool isDebug;
 
-		private List<IVideoAdvertisement> _ads = new List<IVideoAdvertisement>();
+        [SerializeField]
+        bool initializeManually;
+
+        private List<IVideoAdvertisement> _ads = new List<IVideoAdvertisement>();
 
         public bool randomize = false;
 
-		private void Start()
-		{
-			if (!initializeManually)
-				Initialize();
-		}
+        protected override void Awake()
+        {
+            var res = CheckInstance();
+            if (res)
+            {
+                DontDestroyOnLoad(this.gameObject);
+            }
+        }
 
-		public void Initialize()
-		{
-			if (_ads.Count() == 0) {
+        private void Start()
+        {
+            if (!initializeManually)
+                Initialize();
+        }
 
-				if (Application.isEditor) {
-					// Editor用の画面を表示する
-					_ads.Add(new UADDummyAd());
-				} else {
-
-					// 有効になっている動画広告の設定とInitializeを行う.
+        public void Initialize()
+        {
+            if (_ads.Count() == 0)
+            {
+                if (Application.isEditor)
+                {
+                    // Editor用の画面を表示する
+                    _ads.Add(new UADDummyAd());
+                }
+                else
+                {
+                    // 有効になっている動画広告の設定とInitializeを行う.
 #if UNITY_ADS
 					_ads.Add(new UADUnityAdsV2(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId, isDebug));
 #elif UNITY_MONETIZATION
-					_ads.Add(new UAdUnityMonetization(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId, isDebug));
+                    _ads.Add(new UAdUnityMonetization(setting.unityAds.GameId, setting.unityAds.rewardVideoPlacementId,
+                        isDebug));
 #endif
 
-					if (setting.enableAdcolony) {
-						var adcolony = setting.adColony.GetSetting;
+                    if (setting.enableAdcolony)
+                    {
+                        var adcolony = setting.adColony.GetSetting;
 #if ENABLE_ADCOLONY
-						_ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
+                        _ads.Add(new UADAdColony(adcolony.appId, adcolony.rewardZoneId, this.isDebug));
 #endif
-					}
-				}
-			    this._ads.ForEach(v => v.Initialize());
-			}
-		}
+                    }
+                }
 
-		public bool IsReady()
-		{
-			return this._ads.Any(v => v.IsReady());
-		}
+                this._ads.ForEach(v => v.Initialize());
+            }
+        }
 
-		public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
-		{
+        public bool IsReady()
+        {
+            return this._ads.Any(v => v.IsReady());
+        }
+
+        public bool ShowRewardVideoAd(OnFinishRewardVideo onFinish)
+        {
             var adList = new List<IVideoAdvertisement>();
             adList.AddRange(this._ads);
             if (randomize)
                 adList.Shuffle();
 
-			foreach (var v in adList) {
-				if (v.IsReady()) {
-					var res = v.ShowRewardVideoAd(onFinish);
-					if (res)
-						return true;
-				}
-			}
-			// 現在表示できるネットワークがない. cacheにのっていない可能性もあるので、しばらくしてから再度行うように案内するのが無難.
-			return false;
-		}
-	}
+            foreach (var v in adList)
+            {
+                if (v.IsReady())
+                {
+                    var res = v.ShowRewardVideoAd(onFinish);
+                    if (res)
+                        return true;
+                }
+            }
+
+            // 現在表示できるネットワークがない. cacheにのっていない可能性もあるので、しばらくしてから再度行うように案内するのが無難.
+            return false;
+        }
+
+        public void ShowRewardVideoAdAsync(OnFinishRewardVideo onFinish)
+        {
+            StartCoroutine(_ShowRewardVideoAdAsync(onFinish));
+        }
+
+        private IEnumerator _ShowRewardVideoAdAsync(OnFinishRewardVideo onFinish)
+        {
+            var adList = new List<IVideoAdvertisement>();
+            adList.AddRange(this._ads);
+            if (randomize)
+                adList.Shuffle();
+
+            bool finish;
+            VideoAdStatus status = VideoAdStatus.AdNotReadyOrShowing;
+            foreach (var v in adList)
+            {
+                finish = false;
+                StartCoroutine(v.ShowRewardVideoAsync((s) =>
+                {
+                    finish = true;
+                    status = s;
+                }));
+                yield return new WaitUntil(() => finish);
+                if (status != VideoAdStatus.AdNotReadyOrShowing)
+                {
+                    onFinish.Invoke(status);
+                    yield break;
+                }
+            }
+
+            onFinish.Invoke(VideoAdStatus.Fail);
+        }
+    }
 }
