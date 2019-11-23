@@ -12,6 +12,7 @@
 // Converts C style string to NSString
 #define GetStringParam( _x_ ) ( _x_ != NULL ) ? [NSString stringWithUTF8String:_x_] : [NSString stringWithUTF8String:""]
 
+
 // Converts C style string to NSString as long as it isnt empty
 #define GetStringParamOrNil( _x_ ) ( _x_ != NULL && strlen( _x_ ) ) ? [NSString stringWithUTF8String:_x_] : nil
 
@@ -67,6 +68,7 @@ NSString *getGUID() {
     return uuidString;
 }
 
+
 @interface AdColonyInterstitial (ADCUnityWrapper)
 
 @end
@@ -78,6 +80,7 @@ NSString *getGUID() {
              @"expired": @(self.expired),
              @"audio_enabled": @(self.audioEnabled),
              @"iap_enabled": @(self.iapEnabled)};
+    
 }
 
 - (NSString *)serializeForUnityWithId:(NSString *)adId {
@@ -91,11 +94,13 @@ NSString *getGUID() {
 
 @end
 
+
 @interface AdcAdsUnityController : NSObject
 
 @property (nonatomic, copy) NSString *managerName;
 @property (nonatomic, copy) NSString *adapterVersion;
 @property (nonatomic, strong) NSMutableDictionary *interstitialAds;
+@property (nonatomic, strong) NSMutableDictionary *bannerAds;
 @property (nonatomic, copy) NSString *appOptionsJson;
 
 @end
@@ -116,29 +121,190 @@ NSString *getGUID() {
 - (id)init {
     if (self = [super init]) {
         self.interstitialAds = @{}.mutableCopy;
+        self.bannerAds = @{}.mutableCopy;
     }
     return self;
+}
+@end
+
+
+@interface AdcBannerAdManager : NSObject<AdColonyAdViewDelegate>
+
+// Properties
+@property (nonatomic, strong) NSString *adID;
+@property (nonatomic) NSInteger adViewLocation;
+@property (nonatomic, strong) NSString *zoneID;
+@property (nonatomic, strong) AdColonyAdView *adView;
+
+// Methods
+- (void)requestAdViewInZone:(NSString *)zoneId withSize:(NSInteger)adSize location:(NSInteger)adLocation andOptions:(NSString *)adOptionsJson;
+- (void)destroyAdView;
+
+@end
+
+typedef enum : NSInteger {
+    AdViewLocationTop = 0,
+    AdViewLocationBottom,
+    AdViewLocationTopLeft,
+    AdViewLocationTopRight,
+    AdViewLocationBottomLeft,
+    AdViewLocationBottomRight,
+    AdViewLocationCenter
+} AdViewLocation;
+
+@implementation AdcBannerAdManager
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.adID = getGUID();
+    }
+    return self;
+}
+
+
+- (void)requestAdViewInZone:(NSString *)zoneId withSize:(NSInteger)adSize location:(NSInteger)adLocation andOptions:(NSString *)adOptionsJson {
+    self.zoneID = zoneId;
+    self.adViewLocation = adLocation;
+    
+    AdColonyAdOptions *adOptions = nil;
+    if (adOptionsJson.length) {
+        adOptions = [[AdColonyAdOptions alloc] init];
+        [adOptions setupWithJson:adOptionsJson];
+    }
+    
+    AdColonyAdSize size;
+    switch (adSize) {
+        case 1:
+            size = kAdColonyAdSizeBanner;
+            break;
+        case 2:
+            size = kAdColonyAdSizeMediumRectangle;
+            break;
+        case 3:
+            size = kAdColonyAdSizeLeaderboard;
+            break;
+        case 4:
+            size = kAdColonyAdSizeSkyscraper;
+            break;
+        default:
+            size = kAdColonyAdSizeBanner;
+            break;
+    }
+    
+   UIViewController *viewController = GetAppController().rootViewController;
+   [AdColony requestAdViewInZone:zoneId withSize:size viewController:viewController andDelegate:self];
+}
+
+- (void)destroyAdView {
+    if (self.adView) {
+        [self.adView destroy];
+        self.adView = nil;
+        [[AdcAdsUnityController sharedInstance].bannerAds removeObjectForKey:self.adID];
+    }
+}
+
+- (NSString *)getMessageString {
+    NSString *message = [NSString stringWithFormat:@"{\"id\" : \"%@\", \"zone_id\" : \"%@\", \"position\" : \"%ld\"}", self.adID, self.zoneID, long(self.adViewLocation)];
+    return message;
+}
+
+
+#pragma mark --
+#pragma mark  AdViewBannerDelegate
+
+- (void)adColonyAdViewDidLoad:(AdColonyAdView *)adView {
+    adView.frame = [self getFrameForAdView:adView];
+    UnityAppController* unityAppController = GetAppController();
+    [unityAppController.rootView addSubview:adView];
+    self.adView = adView;
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewLoaded"];
+}
+
+- (void)adColonyAdViewDidFailToLoad:(AdColonyAdRequestError *)error {
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewFailedToLoad"];
+}
+
+- (void)adColonyAdViewWillLeaveApplication:(AdColonyAdView *)adView {
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewLeftApplication"];
+}
+
+- (void)adColonyAdViewWillOpen:(AdColonyAdView *)adView {
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewOpened"];
+}
+
+- (void)adColonyAdViewDidClose:(AdColonyAdView *)adView {
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewClosed"];
+}
+
+- (void)adColonyAdViewDidReceiveClick:(AdColonyAdView *)adView  {
+    [AdcAdsUnityController sendUnityMessage:[self getMessageString] toMethod:"_OnAdColonyAdViewClicked"];
+}
+
+-  (CGRect)getFrameForAdView:(AdColonyAdView *)adView {
+    CGRect frame;
+    UnityAppController* unityAppController = GetAppController();
+    CGFloat centeredX = (unityAppController.rootView.bounds.size.width - adView.bounds.size.width) / 2;
+    CGFloat centeredY = (unityAppController.rootView.bounds.size.height - adView.bounds.size.height) / 2;
+    
+    switch (self.adViewLocation) {
+        case AdViewLocationTop:
+            frame = CGRectMake(centeredX, 0, adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationTopLeft:
+            frame = CGRectMake(0, 0, adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationTopRight:
+            frame = CGRectMake(unityAppController.rootView.bounds.size.width - adView.bounds.size.width, 0,
+                               adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationBottom:
+            frame = CGRectMake(centeredX, unityAppController.rootView.bounds.size.height - adView.bounds.size.height,
+                               adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationBottomLeft:
+            frame = CGRectMake(0, unityAppController.rootView.bounds.size.height - adView.bounds.size.height,
+                               adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationBottomRight:
+            frame = CGRectMake(unityAppController.rootView.bounds.size.width - adView.bounds.size.width,
+                               unityAppController.rootView.bounds.size.height - adView.bounds.size.height,
+                               adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        case AdViewLocationCenter:
+            frame = CGRectMake(centeredX, centeredY, adView.bounds.size.width, adView.bounds.size.height);
+            break;
+        default:
+            break;
+    }
+    
+    return frame;
 }
 
 @end
 
 extern "C" {
+    
     void _AdcSetManagerNameAds(const char *managerName, const char *adapterVersion) {
         [AdcAdsUnityController sharedInstance].managerName = GetStringParam(managerName);
         [AdcAdsUnityController sharedInstance].adapterVersion = GetStringParam(adapterVersion);
     }
-
+    
+#pragma mark --
+#pragma mark  AdConfigure
+    
+    
     void _AdcConfigure(const char *appId_, const char *appOptionsJson_, int zoneIdsCount_, const char *zoneIds_[]) {
         NSString *appId = GetStringParamOrNil(appId_);
-
+        
         NSMutableArray *zoneIds = @[].mutableCopy;
         for (int i = 0; i < zoneIdsCount_; ++i) {
             [zoneIds addObject:GetStringParamOrNil(zoneIds_[i])];
         }
-
+        
         NSString *appOptionsJson = GetStringParamOrNil(appOptionsJson_);
         [AdcAdsUnityController sharedInstance].appOptionsJson = appOptionsJson;
-
+        
         // SDK-40 appOptions can no longer be nil all the time; the metadata
         // regarding the plugin must be set now
         AdColonyAppOptions *appOptions = [[AdColonyAppOptions alloc] init];
@@ -147,12 +313,14 @@ extern "C" {
         }
         [appOptions setPlugin:ADCUnity];
         [appOptions setPluginVersion:[AdcAdsUnityController sharedInstance].adapterVersion];
-
+      
+        
+        
         [AdColony configureWithAppID:appId zoneIDs:zoneIds options:appOptions completion:^(NSArray<AdColonyZone *> *zones) {
             NSMutableArray *zoneJsonArray = [NSMutableArray array];
             for (AdColonyZone *zone in zones) {
                 [zoneJsonArray addObject:[zone toJsonString]];
-
+                
                 if (zone.rewarded) {
                     // For each zone returned that is also a rewarded zone, register a callback that will then call _OnRewardGranted.
                     NSString *zoneID = zone.identifier;
@@ -165,15 +333,15 @@ extern "C" {
                     }];
                 }
             }
-
+            
             [AdcAdsUnityController sendUnityMessage:[zoneJsonArray toJsonString] toMethod:"_OnConfigure"];
         }];
     }
-
+    
     const char *_AdcGetSDKVersion() {
         return MakeStringCopy([AdColony getSDKVersion]);
     }
-
+    
     void _AdcShowInterstitialAd(const char *id) {
         NSString *adId = GetStringParamOrNil(id);
         if (adId) {
@@ -185,7 +353,7 @@ extern "C" {
             }
         }
     }
-
+    
     void _AdcCancelInterstitialAd(const char *id) {
         NSString *adId = GetStringParamOrNil(id);
         if (adId) {
@@ -196,12 +364,12 @@ extern "C" {
             }
         }
     }
-
+    
     void _AdcDestroyInterstitialAd(const char *id) {
         NSString *adId = GetStringParamOrNil(id);
         [[AdcAdsUnityController sharedInstance].interstitialAds removeObjectForKey:adId];
     }
-
+    
     void _AdcRequestInterstitialAd(const char *zoneId, const char *adOptionsJson) {
         NSString *myAdOptionsJson = GetStringParamOrNil(adOptionsJson);
         AdColonyAdOptions *adOptions = nil;
@@ -209,15 +377,15 @@ extern "C" {
             adOptions = [[AdColonyAdOptions alloc] init];
             [adOptions setupWithJson:myAdOptionsJson];
         }
-
+        
         NSString *zoneIds = GetStringParam(zoneId);
-
+        
         [AdColony requestInterstitialInZone:zoneIds
                                     options:adOptions
                                     success:^(AdColonyInterstitial *ad) {
                                         NSString *adId = getGUID();
                                         [AdcAdsUnityController sharedInstance].interstitialAds[adId] = ad;
-
+                                        
                                         weakify(ad);
                                         [ad setOpen:^{
                                             strongify(ad);
@@ -255,7 +423,7 @@ extern "C" {
                                             [mutableDict setObject:@((int)engagement) forKey:ADC_ON_IAP_OPPORTUNITY_ENGAGEMENT_KEY];
                                             [AdcAdsUnityController sendUnityMessage:[mutableDict toJsonString] toMethod:"_OnIAPOpportunity"];
                                         }];
-
+                                        
                                         [AdcAdsUnityController sendUnityMessage:[ad serializeForUnityWithId:adId] toMethod:"_OnRequestInterstitial"];
                                     }
                                     failure:^(AdColonyAdRequestError *error) {
@@ -264,38 +432,56 @@ extern "C" {
                                         [AdcAdsUnityController sendUnityMessage:[dict toJsonString] toMethod:"_OnRequestInterstitialFailed"];
                                     }];
     }
-
+    
+    
+#pragma mark --
+#pragma mark  AdView
+    
+    void _AdcRequestAdView(const char *zoneId, const int adSize, const int adPosition, const char *optionsJson) {
+        AdcBannerAdManager *bannerAdManager = [[AdcBannerAdManager alloc] init];
+        [bannerAdManager requestAdViewInZone:GetStringParam(zoneId) withSize:adSize location:adPosition andOptions:GetStringParamOrNil(optionsJson)];
+        [AdcAdsUnityController sharedInstance].bannerAds[bannerAdManager.adID] = bannerAdManager;
+    }
+    
+    void _AdcDestroyAdView(const char *adID) {
+        AdcBannerAdManager *bannerAdManager = [AdcAdsUnityController sharedInstance].bannerAds[GetStringParamOrNil(adID)];
+        if (bannerAdManager) {
+            [bannerAdManager destroyAdView];
+        }
+    }
+    
+    
     // should return JSON
     const char *_AdcGetZone(const char *zoneId) {
         NSString *zoneString = GetStringParamOrNil(zoneId);
         if (zoneString == nil) {
             return nil;
         }
-
+        
         AdColonyZone *zone = [AdColony zoneForID:zoneString];
         if (zone == nil) {
             return nil;
         }
-
+        
         return MakeStringCopy([zone toJsonString]);
     }
-
+    
     const char *_AdcGetUserID() {
         return MakeStringCopy([AdColony getUserID]);
     }
-
+    
     void _AdcSetAppOptions(const char *appOptionsJson) {
         [AdcAdsUnityController sharedInstance].appOptionsJson = GetStringParam(appOptionsJson);
-
+        
         AdColonyAppOptions *appOptions = [[AdColonyAppOptions alloc] init];
         [appOptions setupWithJson:[AdcAdsUnityController sharedInstance].appOptionsJson];
         [AdColony setAppOptions:appOptions];
     }
-
+    
     const char *_AdcGetAppOptions() {
         return MakeStringCopy([AdcAdsUnityController sharedInstance].appOptionsJson);
     }
-
+    
     void _AdcSendCustomMessage(const char *type, const char *content) {
         NSString *typeString = GetStringParamOrNil(type);
         if (typeString != nil) {
@@ -310,99 +496,99 @@ extern "C" {
                                         }];
         }
     }
-
+    
     void _AdcLogInAppPurchase(const char *transactionId, const char *productId, int purchasePriceMicro, const char *currencyCode) {
         [AdColony iapCompleteWithTransactionID:GetStringParam(transactionId)
                                      productID:GetStringParam(productId)
                                          price:[NSNumber numberWithInt:purchasePriceMicro]
                                   currencyCode:GetStringParamOrNil(currencyCode)];
     }
-
+    
     void _AdcLogTransactionWithID(const char *itemID, int quantity, double price, const char *currencyCode, const char *receipt, const char *store, const char *description) {
         [AdColonyEventTracker logTransactionWithID:GetStringParam(itemID)
-            quantity:(NSInteger)quantity
-            price:[NSNumber numberWithDouble:price]
-            currencyCode:GetStringParam(currencyCode)
-            receipt:GetStringParam(receipt)
-            store:GetStringParam(store)
-            description:GetStringParam(description)];
+                                          quantity:(NSInteger)quantity
+                                             price:[NSNumber numberWithDouble:price]
+                                      currencyCode:GetStringParam(currencyCode)
+                                           receipt:GetStringParam(receipt)
+                                             store:GetStringParam(store)
+                                       description:GetStringParam(description)];
     }
-
+    
     void _AdcLogCreditsSpentWithName(const char *name, int quantity, double value, const char *currencyCode) {
         [AdColonyEventTracker logCreditsSpentWithName:GetStringParam(name)
-            quantity:(NSInteger)quantity
-            value:[NSNumber numberWithDouble:value]
-            currencyCode:GetStringParam(currencyCode)];
+                                             quantity:(NSInteger)quantity
+                                                value:[NSNumber numberWithDouble:value]
+                                         currencyCode:GetStringParam(currencyCode)];
     }
-
+    
     void _AdcLogPaymentInfoAdded() {
         [AdColonyEventTracker logPaymentInfoAdded];
     }
-
+    
     void _AdcLogAchievementUnlocked(const char *description) {
         [AdColonyEventTracker logAchievementUnlocked:GetStringParam(description)];
     }
-
+    
     void _AdcLogLevelAchieved(int level) {
         [AdColonyEventTracker logLevelAchieved:(NSInteger)level];
     }
-
+    
     void _AdcLogAppRated() {
         [AdColonyEventTracker logAppRated];
     }
-
+    
     void _AdcLogActivated() {
         [AdColonyEventTracker logActivated];
     }
-
+    
     void _AdcLogTutorialCompleted() {
         [AdColonyEventTracker logTutorialCompleted];
     }
-
+    
     void _AdcLogSocialSharingEventWithNetwork(const char *network, const char *description) {
         [AdColonyEventTracker logSocialSharingEventWithNetwork:GetStringParam(network) description:GetStringParam(description)];
     }
-
+    
     void _AdcLogRegistrationCompletedWithMethod(const char *method, const char *description) {
         [AdColonyEventTracker logRegistrationCompletedWithMethod:GetStringParam(method) description:GetStringParam(description)];
     }
-
+    
     void _AdcLogCustomEvent(const char *event, const char *description) {
         [AdColonyEventTracker logCustomEvent:GetStringParam(event) description:GetStringParam(description)];
     }
-
+    
     void _AdcLogAddToCartWithID(const char *itemID) {
         [AdColonyEventTracker logAddToCartWithID:GetStringParam(itemID)];
     }
-
+    
     void _AdcLogAddToWishlistWithID(const char *itemID) {
         [AdColonyEventTracker logAddToWishlistWithID:GetStringParam(itemID)];
     }
-
+    
     void _AdcLogCheckoutInitiated() {
         [AdColonyEventTracker logCheckoutInitiated];
     }
-
+    
     void _AdcLogContentViewWithID(const char *contentID, const char *contentType) {
         [AdColonyEventTracker logContentViewWithID:GetStringParam(contentID) contentType:GetStringParam(contentType)];
     }
-
+    
     void _AdcLogInvite() {
         [AdColonyEventTracker logInvite];
     }
-
+    
     void _AdcLogLoginWithMethod(const char *method) {
         [AdColonyEventTracker logLoginWithMethod:GetStringParam(method)];
     }
-
+    
     void _AdcLogReservation() {
         [AdColonyEventTracker logReservation];
     }
-
+    
     void _AdcLogSearchWithQuery(const char *queryString) {
         [AdColonyEventTracker logSearchWithQuery:GetStringParam(queryString)];
     }
-
+    
     void _AdcLogEvent(const char *name, const char *dataAsJson) {
         NSString *dataAsJsonStr = GetStringParamOrNil(dataAsJson);
         NSDictionary *dict = [dataAsJsonStr jsonStringToDictionary];

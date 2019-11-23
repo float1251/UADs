@@ -21,4 +21,17 @@
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-15.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-gass-15.0.1.aar</file>
   </files>
+  <settings>
+    <setting name="androidAbis" value="armeabi-v7a,x86" />
+    <setting name="bundleId" value="jp.float1251.test_ads" />
+    <setting name="explodeAars" value="False" />
+    <setting name="gradleBuildEnabled" value="True" />
+    <setting name="gradleTemplateEnabled" value="False" />
+    <setting name="installAndroidPackages" value="True" />
+    <setting name="packageDir" value="Assets/Plugins/Android" />
+    <setting name="patchAndroidManifest" value="False" />
+    <setting name="patchMainTemplateGradle" value="False" />
+    <setting name="projectExportEnabled" value="False" />
+    <setting name="useJetifier" value="True" />
+  </settings>
 </dependencies>

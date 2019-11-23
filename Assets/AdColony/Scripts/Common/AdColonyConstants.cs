@@ -65,9 +65,9 @@ namespace AdColony {
         public static string AdsMessageErrorUnableToRebuildAd = "Error, unable to rebuild ad";
         public static string AdsMessageErrorInvalidImplementation = "Error, platform-specific implementation not set";
 
-        public const string AdapterVersion = "3.3.9";
-        public const string AndroidSDKVersion = "3.3.9";
-        public const string iOSSDKVersion = "3.3.7";
+        public const string AdapterVersion = "4.1.2";
+        public const string AndroidSDKVersion = "4.1.0";
+        public const string iOSSDKVersion = "4.1.2";
     }
 
     public class PIEConstants {

@@ -49,6 +49,21 @@ namespace AdColony {
             _pluginWrapper.CallStatic("requestInterstitialAd", json);
         }
 
+        public void RequestAdView(string zoneId,AdSize adSize, AdPosition adPosition, AdOptions adOptions)
+        {
+            Hashtable values = new Hashtable();
+            values["zone_id"] = zoneId;
+            values["ad_size"] = (Int32)adSize;
+            values["ad_position"] = (Int32)adPosition;
+            if (adOptions != null)
+            {
+                values["ad_options"] = adOptions.ToHashtable();
+            }
+
+            string json = AdColonyJson.Encode(values);
+            _pluginWrapper.CallStatic("requestAdView", json);
+        }
+
         public Zone GetZone(string zoneId) {
             string zoneJson = _pluginWrapper.CallStatic<string>("getZone", zoneId);
             Hashtable zoneValues = (AdColonyJson.Decode(zoneJson) as Hashtable);
@@ -98,6 +113,12 @@ namespace AdColony {
 
         public void DestroyAd(string id) {
             _pluginWrapper.CallStatic("destroyAd", id);
+        }
+
+        public void DestroyAdView(string id)
+        {
+            Debug.Log("AdColony.Android.DestroyAdView called.");
+            _pluginWrapper.CallStatic("destroyAdView", id);
         }
 
         public void RegisterForCustomMessage(string type) {

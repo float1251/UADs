@@ -19,7 +19,9 @@ namespace AdColony {
         [DllImport ("__Internal")] private static extern void _AdcLogInAppPurchase(string transactionId, string productId, int purchasePriceMicro, string currencyCode);
         [DllImport ("__Internal")] private static extern void _AdcShowInterstitialAd(string id);
         [DllImport ("__Internal")] private static extern void _AdcCancelInterstitialAd(string id);
-        [DllImport ("__Internal")] private static extern void _AdcDestroyInterstitialAd(string id);
+        [DllImport ("__Internal")] private static extern void _AdcDestroyInterstitialAd(string id); 
+        [DllImport("__Internal")] private static extern void _AdcRequestAdView(string zoneId, AdSize adSize, AdPosition adPosition, string adOptions);
+        [DllImport ("__Internal")] private static extern void _AdcDestroyAdView(string id); 
 
         public AdsIOS(string managerName) {
             _AdcSetManagerNameAds(managerName, Constants.AdapterVersion);
@@ -50,6 +52,16 @@ namespace AdColony {
             }
 
             _AdcRequestInterstitialAd(zoneId, optionsJson);
+        }
+
+        public void RequestAdView(string zoneId,AdSize adSize, AdPosition adPosition, AdOptions adOptions)
+        {
+            string optionsJson = null;
+            if (adOptions != null) {
+                optionsJson = adOptions.ToJsonString();
+            }
+
+            _AdcRequestAdView(zoneId, adSize, adPosition, optionsJson);
         }
 
         public Zone GetZone(string zoneId) {
@@ -98,6 +110,12 @@ namespace AdColony {
 
         public void DestroyAd(string id) {
             _AdcDestroyInterstitialAd(id);
+        }
+
+        public void DestroyAdView(string id)
+        {
+            Debug.Log("AdColony.AdColonyIOS.DestroyAdView called.");
+            _AdcDestroyAdView(id);
         }
     }
 #endif
