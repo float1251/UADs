@@ -1,13 +1,31 @@
 fileFormatVersion: 2
-guid: 53447adfb8fa47f7b39e3cd324dcf9ab
+guid: 1c9c4a238add64ca5abfbefda455966a
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
-  isOverridable: 0
+  isOverridable: 1
+  isExplicitlyReferenced: 0
   platformData:
+  - first:
+      '': Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Android: 1
+        Exclude Editor: 1
+        Exclude Linux: 1
+        Exclude Linux64: 1
+        Exclude LinuxUniversal: 1
+        Exclude OSXUniversal: 1
+        Exclude WebGL: 1
+        Exclude Win: 1
+        Exclude Win64: 1
+        Exclude iOS: 0
+        Exclude tvOS: 1
   - first:
       Editor: Editor
     second:
@@ -18,8 +36,7 @@ PluginImporter:
       iPhone: iOS
     second:
       enabled: 1
-      settings:
-        AddToEmbeddedBinaries: false
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
