@@ -540,6 +540,11 @@ PrefabInstance:
       propertyPath: isDebug
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114123426769762738, guid: 2f0774be8d14c433f8ff5c47f6e0ca91,
+        type: 3}
+      propertyPath: randomize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f0774be8d14c433f8ff5c47f6e0ca91, type: 3}
 --- !u!1 &442842278

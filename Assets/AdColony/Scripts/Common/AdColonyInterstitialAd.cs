@@ -1,12 +1,12 @@
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using UnityEngine;
 
-namespace AdColony {
+namespace AdColony
+{
 
-    public class InterstitialAd {
+    public class InterstitialAd
+    {
         /// <summary>
         /// Represents the unique zone identifier string from which the interstitial was requested.
         /// AdColony zone IDs can be created at the [Control Panel](http://clients.adcolony.com).
@@ -21,38 +21,54 @@ namespace AdColony {
 
         // ---------------------------------------------------------------------------
 
-#region Internal Methods - do not call these
+        #region Internal Methods - do not call these
         public string Id;
 
-        public InterstitialAd(Hashtable values) {
+        public InterstitialAd(Hashtable values)
+        {
             UpdateValues(values);
         }
 
-        public void UpdateValues(Hashtable values) {
-            if (values != null) {
-                if (values.ContainsKey("zone_id")) {
+        public void UpdateValues(Hashtable values)
+        {
+            if (values != null)
+            {
+                if (values.ContainsKey("zone_id"))
+                {
                     ZoneId = values["zone_id"] as string;
                 }
-                if (values.ContainsKey("expired")) {
+                if (values.ContainsKey("expired"))
+                {
                     Expired = Convert.ToBoolean(values["expired"]);
                 }
-                if (values.ContainsKey("id")) {
+                if (values.ContainsKey("id"))
+                {
                     Id = values["id"] as string;
                 }
             }
         }
 
-        ~InterstitialAd() {
-            if (IsValid()) {
+        ~InterstitialAd()
+        {
+            Debug.Log("AdColony.InterstitialAd.Destructors called.");
+            if (IsValid())
+            {
                 Ads.SharedGameObject.EnqueueAction(() => { Ads.DestroyAd(Id); });
             }
         }
 
-        private bool IsValid() {
+        public void DestroyAd()
+        {
+            Debug.Log("AdColony.InterstitialAd.DestroyAd called.");
+            Ads.DestroyAd(Id);
+        }
+
+        private bool IsValid()
+        {
             return !System.String.IsNullOrEmpty(Id);
         }
 
-#endregion
+        #endregion
 
     }
 }

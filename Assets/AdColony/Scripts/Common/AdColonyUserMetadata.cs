@@ -2,21 +2,26 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
-namespace AdColony {
-    public class UserMetadata {
+namespace AdColony
+{
+    public class UserMetadata
+    {
         private int _age;
         /// <summary>
         /// Configures the user's age.
         /// Set this property to configure the user's age.
         /// </summary>
-        public int Age {
-            get {
+        public int Age
+        {
+            get
+            {
                 return _age;
             }
-            set {
-                if (value <= 0) {
+            set
+            {
+                if (value <= 0)
+                {
                     Debug.Log("Tried to set user metadata age with an invalid value. Value will not be included.");
                     return;
                 }
@@ -31,11 +36,14 @@ namespace AdColony {
         /// Configures the user's interests.
         /// Set this property with an array of NSStrings to configure the user's interests.
         /// </summary>
-        public List<string> Interests {
-            get {
+        public List<string> Interests
+        {
+            get
+            {
                 return _interests;
             }
-            set {
+            set
+            {
                 _interests = value;
                 _data[Constants.UserMetadataInterestsKey] = new ArrayList(_interests);
             }
@@ -47,12 +55,16 @@ namespace AdColony {
         /// Set this property to configure the user's gender.
         /// Note that you should use one of the pre-defined constants below to configure this property.
         /// </summary>
-        public string Gender {
-            get {
+        public string Gender
+        {
+            get
+            {
                 return _gender;
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     Debug.Log("Tried to set user metadata gender with an invalid string. Value will not be included.");
                     return;
                 }
@@ -68,11 +80,14 @@ namespace AdColony {
         /// Configures the user's latitude.
         /// Set this property to configure the user's latitude.
         /// </summary>
-        public double Latitude {
-            get {
+        public double Latitude
+        {
+            get
+            {
                 return _latitude;
             }
-            set {
+            set
+            {
                 _latitude = value;
                 _data[Constants.UserMetadataLatitudeKey] = _latitude;
             }
@@ -83,11 +98,14 @@ namespace AdColony {
         /// Configures the user's longitude.
         /// Set this property to configure the user's longitude.
         /// </summary>
-        public double Longitude {
-            get {
+        public double Longitude
+        {
+            get
+            {
                 return _longitude;
             }
-            set {
+            set
+            {
                 _longitude = value;
                 _data[Constants.UserMetadataLongitudeKey] = _longitude;
             }
@@ -98,12 +116,16 @@ namespace AdColony {
         /// Configures the user's zip code.
         /// Set this property to configure the user's zip code.
         /// </summary>
-        public string ZipCode {
-            get {
+        public string ZipCode
+        {
+            get
+            {
                 return _zipCode;
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     Debug.Log("Tried to set user metadata zip code with an invalid string. Value will not be included.");
                     return;
                 }
@@ -119,11 +141,14 @@ namespace AdColony {
         /// Configures the user's household income.
         /// Set this property to configure the user's household income.
         /// </summary>
-        public int HouseholdIncome {
-            get {
+        public int HouseholdIncome
+        {
+            get
+            {
                 return _householdIncome;
             }
-            set {
+            set
+            {
                 _householdIncome = value;
                 _data[Constants.UserMetadataHouseholdIncomeKey] = _householdIncome;
             }
@@ -136,12 +161,16 @@ namespace AdColony {
         /// NOTE: that you should use one of the pre-defined constants below to configure this property.
         /// </summary>
         /// <see cref="AdMetadataMaritalStatusType" />
-        public string MaritalStatus {
-            get {
+        public string MaritalStatus
+        {
+            get
+            {
                 return _maritalStatus;
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     Debug.Log("Tried to set user metadata marital status with an invalid string. Value will not be included.");
                     return;
                 }
@@ -159,12 +188,16 @@ namespace AdColony {
         /// NOTE: that you should use one of the pre-defined constants below to configure this property.
         /// </summary>
         /// <see cref="AdMetadataEducationLevelType" />
-        public string EducationLevel {
-            get {
+        public string EducationLevel
+        {
+            get
+            {
                 return _educationLevel;
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     Debug.Log("Tried to set user metadata education level with an invalid string. Value will not be included.");
                     return;
                 }
@@ -182,8 +215,10 @@ namespace AdColony {
         /// <param name="value">Value of the option.</param>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// </summary>
-        public void SetMetadata(string key, string value) {
-            if (key == null) {
+        public void SetMetadata(string key, string value)
+        {
+            if (key == null)
+            {
                 return;
             }
             _data[key] = value;
@@ -196,8 +231,10 @@ namespace AdColony {
         /// <param name="value">Value of the option.</param>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// </summary>
-        public void SetMetadata(string key, int value) {
-            if (key == null) {
+        public void SetMetadata(string key, int value)
+        {
+            if (key == null)
+            {
                 return;
             }
             _data[key] = value;
@@ -210,8 +247,10 @@ namespace AdColony {
         /// <param name="value">Value of the option.</param>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// </summary>
-        public void SetMetadata(string key, double value) {
-            if (key == null) {
+        public void SetMetadata(string key, double value)
+        {
+            if (key == null)
+            {
                 return;
             }
             _data[key] = value;
@@ -224,8 +263,10 @@ namespace AdColony {
         /// <param name="value">Value of the option.</param>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// </summary>
-        public void SetMetadata(string key, bool value) {
-            if (key == null) {
+        public void SetMetadata(string key, bool value)
+        {
+            if (key == null)
+            {
                 return;
             }
             _data[key] = value;
@@ -237,7 +278,8 @@ namespace AdColony {
         /// </summary>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// <returns>The string-based value associated with the given key. Returns `null` if the option has not been set.</returns>
-        public string GetStringMetadata(string key) {
+        public string GetStringMetadata(string key)
+        {
             return _data.ContainsKey(key) ? _data[key] as string : null;
         }
 
@@ -247,7 +289,8 @@ namespace AdColony {
         /// </summary>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// <returns>The integer-based value associated with the given key. Returns `null` if the option has not been set.</returns>
-        public int GetIntMetadata(string key) {
+        public int GetIntMetadata(string key)
+        {
             return _data.ContainsKey(key) ? Convert.ToInt32(_data[key]) : 0;
         }
 
@@ -257,7 +300,8 @@ namespace AdColony {
         /// </summary>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// <returns>The double-precision-based value associated with the given key. Returns `null` if the option has not been set.</returns>
-        public double GetDoubleMetadata(string key) {
+        public double GetDoubleMetadata(string key)
+        {
             return _data.ContainsKey(key) ? Convert.ToDouble(_data[key]) : 0.0;
         }
 
@@ -267,57 +311,73 @@ namespace AdColony {
         /// </summary>
         /// <param name="key"> A string used to configure the option. Strings must be 128 characters or less.</param>
         /// <returns>The boolean-based value associated with the given key. Returns `null` if the option has not been set.</returns>
-        public bool GetBoolMetadata(string key) {
+        public bool GetBoolMetadata(string key)
+        {
             return _data.ContainsKey(key) ? Convert.ToBoolean(Convert.ToInt32(_data[key])) : false;
         }
 
-#region Internal Methods - do not call these
+        #region Internal Methods - do not call these
 
-        public Hashtable ToHashtable() {
+        public Hashtable ToHashtable()
+        {
             return new Hashtable(_data);
         }
 
-        public string ToJsonString() {
+        public string ToJsonString()
+        {
             return AdColonyJson.Encode(_data);
         }
 
-        public UserMetadata() {
+        public UserMetadata()
+        {
 
         }
 
-        public UserMetadata(Hashtable values) {
+        public UserMetadata(Hashtable values)
+        {
             _data = new Hashtable(values);
 
-            if (values != null) {
-                if (values.ContainsKey(Constants.UserMetadataAgeKey)) {
+            if (values != null)
+            {
+                if (values.ContainsKey(Constants.UserMetadataAgeKey))
+                {
                     _age = Convert.ToInt32(values[Constants.UserMetadataAgeKey]);
                 }
-                if (values.ContainsKey(Constants.UserMetadataInterestsKey)) {
+                if (values.ContainsKey(Constants.UserMetadataInterestsKey))
+                {
                     ArrayList interests = values[Constants.UserMetadataInterestsKey] as ArrayList;
                     Interests = new List<string>();
-                    foreach (string interest in interests) {
+                    foreach (string interest in interests)
+                    {
                         Interests.Add(interest);
                     }
                 }
-                if (values.ContainsKey(Constants.UserMetadataGenderKey)) {
+                if (values.ContainsKey(Constants.UserMetadataGenderKey))
+                {
                     _gender = values[Constants.UserMetadataGenderKey] as string;
                 }
-                if (values.ContainsKey(Constants.UserMetadataLatitudeKey)) {
+                if (values.ContainsKey(Constants.UserMetadataLatitudeKey))
+                {
                     _latitude = Convert.ToDouble(values[Constants.UserMetadataLatitudeKey]);
                 }
-                if (values.ContainsKey(Constants.UserMetadataLongitudeKey)) {
+                if (values.ContainsKey(Constants.UserMetadataLongitudeKey))
+                {
                     _longitude = Convert.ToDouble(values[Constants.UserMetadataLongitudeKey]);
                 }
-                if (values.ContainsKey(Constants.UserMetadataZipCodeKey)) {
+                if (values.ContainsKey(Constants.UserMetadataZipCodeKey))
+                {
                     _zipCode = values[Constants.UserMetadataZipCodeKey] as string;
                 }
-                if (values.ContainsKey(Constants.UserMetadataHouseholdIncomeKey)) {
+                if (values.ContainsKey(Constants.UserMetadataHouseholdIncomeKey))
+                {
                     _householdIncome = Convert.ToInt32(values[Constants.UserMetadataHouseholdIncomeKey]);
                 }
-                if (values.ContainsKey(Constants.UserMetadataMaritalStatusKey)) {
+                if (values.ContainsKey(Constants.UserMetadataMaritalStatusKey))
+                {
                     _maritalStatus = values[Constants.UserMetadataMaritalStatusKey] as string;
                 }
-                if (values.ContainsKey(Constants.UserMetadataEducationLevelKey)) {
+                if (values.ContainsKey(Constants.UserMetadataEducationLevelKey))
+                {
                     _educationLevel = values[Constants.UserMetadataEducationLevelKey] as string;
                 }
             }
@@ -325,6 +385,6 @@ namespace AdColony {
 
         private Hashtable _data = new Hashtable();
 
-#endregion
+        #endregion
     }
 }

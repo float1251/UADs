@@ -1,6 +1,7 @@
-using AdColony;
-namespace AdColony.Editor {
-    public static class ADCPluginInfo {
+namespace AdColony.Editor
+{
+    public static class ADCPluginInfo
+    {
         public static string Version = Constants.AdapterVersion;
         public static string AndroidSDKVersion = Constants.AndroidSDKVersion;
         public static string iOSSDKVersion = Constants.iOSSDKVersion;

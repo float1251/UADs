@@ -1,12 +1,12 @@
-using System;
 using UnityEditor;
-using UnityEngine;
-using System.IO;
 
-namespace AdColony.Editor {
-    public class ADCMenu {
+namespace AdColony.Editor
+{
+    public class ADCMenu
+    {
         [MenuItem("Tools/AdColony/Update AndroidManifest.xml", false, 1)]
-        public static void UpdateManifest() {
+        public static void UpdateManifest()
+        {
             ADCManifestProcessor.Process();
             AssetDatabase.Refresh();
 #if UNITY_ANDROID
@@ -17,7 +17,8 @@ namespace AdColony.Editor {
         }
 
         [MenuItem("Tools/AdColony/About")]
-        public static void About() {
+        public static void About()
+        {
             EditorUtility.DisplayDialog(
                 ADCPluginInfo.Name,
                 "Unity plugin version " + ADCPluginInfo.Version + "\n" +

@@ -38,7 +38,8 @@ using Convert = System.Convert;
 using Char = System.Char;
 using Array = System.Array;
 
-namespace AdColony {
+namespace AdColony
+{
 
     /// <summary>
     /// This class encodes and decodes JSON strings.
@@ -82,7 +83,8 @@ namespace AdColony {
         /// <returns>An ArrayList, a Hashtable, a double, a string, null, true, or false</returns>
         public static object Decode(string json)
         {
-            if (json == null) {
+            if (json == null)
+            {
                 return null;
             }
 
@@ -90,20 +92,26 @@ namespace AdColony {
             AdColonyJson.instance.lastDecode = json;
 
             object value = null;
-            try {
-            char[] charArray = json.ToCharArray();
-            int index = 0;
-            bool success = true;
+            try
+            {
+                char[] charArray = json.ToCharArray();
+                int index = 0;
+                bool success = true;
                 value = AdColonyJson.instance.ParseValue(charArray, ref index, ref success);
-            if (success) {
-                AdColonyJson.instance.lastErrorIndex = -1;
-            } else {
-                AdColonyJson.instance.lastErrorIndex = index;
+                if (success)
+                {
+                    AdColonyJson.instance.lastErrorIndex = -1;
+                }
+                else
+                {
+                    AdColonyJson.instance.lastErrorIndex = index;
+                }
             }
-            } catch (System.Exception e) {
+            catch (System.Exception e)
+            {
                 UnityEngine.Debug.LogError(e.ToString());
             }
-            
+
             return value;
         }
 
@@ -114,15 +122,19 @@ namespace AdColony {
         /// <returns>A JSON encoded string, or null if object 'json' is not serializable</returns>
         public static string Encode(object json)
         {
-            if (json == null) {
+            if (json == null)
+            {
                 return null;
             }
 
             bool success = false;
             StringBuilder builder = new StringBuilder(BUILDER_CAPACITY);
-            try {
+            try
+            {
                 success = AdColonyJson.instance.SerializeValue(json, builder);
-            } catch (System.Exception e) {
+            }
+            catch (System.Exception e)
+            {
                 UnityEngine.Debug.LogError(e.ToString());
             }
 
@@ -154,15 +166,20 @@ namespace AdColony {
         /// <returns></returns>
         public static string GetLastErrorSnippet()
         {
-            if (AdColonyJson.instance.lastErrorIndex == -1) {
+            if (AdColonyJson.instance.lastErrorIndex == -1)
+            {
                 return "";
-            } else {
+            }
+            else
+            {
                 int startIndex = AdColonyJson.instance.lastErrorIndex - 5;
                 int endIndex = AdColonyJson.instance.lastErrorIndex + 15;
-                if (startIndex < 0) {
+                if (startIndex < 0)
+                {
                     startIndex = 0;
                 }
-                if (endIndex >= AdColonyJson.instance.lastDecode.Length) {
+                if (endIndex >= AdColonyJson.instance.lastDecode.Length)
+                {
                     endIndex = AdColonyJson.instance.lastDecode.Length - 1;
                 }
 
@@ -179,33 +196,44 @@ namespace AdColony {
             NextToken(json, ref index);
 
             bool done = false;
-            while (!done) {
+            while (!done)
+            {
                 token = LookAhead(json, index);
-                if (token == JsonToken.NONE) {
+                if (token == JsonToken.NONE)
+                {
                     return null;
-                } else if (token == JsonToken.COMMA) {
+                }
+                else if (token == JsonToken.COMMA)
+                {
                     NextToken(json, ref index);
-                } else if (token == JsonToken.CURLY_CLOSE) {
+                }
+                else if (token == JsonToken.CURLY_CLOSE)
+                {
                     NextToken(json, ref index);
                     return table;
-                } else {
+                }
+                else
+                {
 
                     // name
                     string name = ParseString(json, ref index);
-                    if (name == null) {
+                    if (name == null)
+                    {
                         return null;
                     }
 
                     // :
                     token = NextToken(json, ref index);
-                    if (token != JsonToken.COLON) {
+                    if (token != JsonToken.COLON)
+                    {
                         return null;
                     }
 
                     // value
                     bool success = true;
                     object value = ParseValue(json, ref index, ref success);
-                    if (!success) {
+                    if (!success)
+                    {
                         return null;
                     }
 
@@ -224,19 +252,28 @@ namespace AdColony {
             NextToken(json, ref index);
 
             bool done = false;
-            while (!done) {
+            while (!done)
+            {
                 JsonToken token = LookAhead(json, index);
-                if (token == JsonToken.NONE) {
+                if (token == JsonToken.NONE)
+                {
                     return null;
-                } else if (token == JsonToken.COMMA) {
+                }
+                else if (token == JsonToken.COMMA)
+                {
                     NextToken(json, ref index);
-                } else if (token == JsonToken.SQUARED_CLOSE) {
+                }
+                else if (token == JsonToken.SQUARED_CLOSE)
+                {
                     NextToken(json, ref index);
                     break;
-                } else {
+                }
+                else
+                {
                     bool success = true;
                     object value = ParseValue(json, ref index, ref success);
-                    if (!success) {
+                    if (!success)
+                    {
                         return null;
                     }
 
@@ -249,7 +286,8 @@ namespace AdColony {
 
         object ParseValue(char[] json, ref int index, ref bool success)
         {
-            switch (LookAhead(json, index)) {
+            switch (LookAhead(json, index))
+            {
                 case JsonToken.STRING:
                     return ParseString(json, ref index);
                 case JsonToken.NUMBER:
@@ -286,41 +324,65 @@ namespace AdColony {
             c = json[index++];
 
             bool complete = false;
-            while (!complete) {
+            while (!complete)
+            {
 
-                if (index == json.Length) {
+                if (index == json.Length)
+                {
                     break;
                 }
 
                 c = json[index++];
-                if (c == '"') {
+                if (c == '"')
+                {
                     complete = true;
                     break;
-                } else if (c == '\\') {
+                }
+                else if (c == '\\')
+                {
 
-                    if (index == json.Length) {
+                    if (index == json.Length)
+                    {
                         break;
                     }
                     c = json[index++];
-                    if (c == '"') {
+                    if (c == '"')
+                    {
                         s += '"';
-                    } else if (c == '\\') {
+                    }
+                    else if (c == '\\')
+                    {
                         s += '\\';
-                    } else if (c == '/') {
+                    }
+                    else if (c == '/')
+                    {
                         s += '/';
-                    } else if (c == 'b') {
+                    }
+                    else if (c == 'b')
+                    {
                         s += '\b';
-                    } else if (c == 'f') {
+                    }
+                    else if (c == 'f')
+                    {
                         s += '\f';
-                    } else if (c == 'n') {
+                    }
+                    else if (c == 'n')
+                    {
                         s += '\n';
-                    } else if (c == 'r') {
+                    }
+                    else if (c == 'r')
+                    {
                         s += '\r';
-                    } else if (c == 't') {
+                    }
+                    else if (c == 't')
+                    {
                         s += '\t';
-                    } else if (c == 'u') {
+                    }
+                    else if (c == 'u')
+                    {
                         int remainingLength = json.Length - index;
-                        if (remainingLength >= 4) {
+                        if (remainingLength >= 4)
+                        {
                             char[] unicodeCharArray = new char[4];
                             Array.Copy(json, index, unicodeCharArray, 0, 4);
 
@@ -328,7 +390,7 @@ namespace AdColony {
                             //s += "&#x" + new string(unicodeCharArray) + ";";
 
                             // TN: Working version of the code below
-                            s += char.ConvertFromUtf32( int.Parse( new string( unicodeCharArray ), System.Globalization.NumberStyles.HexNumber ) );
+                            s += char.ConvertFromUtf32(int.Parse(new string(unicodeCharArray), System.Globalization.NumberStyles.HexNumber));
 
                             //uint codePoint = System.UInt32.Parse(new string(unicodeCharArray), System.Globalization.NumberStyles.HexNumber);
                             // convert the integer codepoint to a unicode char and add to string
@@ -336,17 +398,22 @@ namespace AdColony {
 
                             // skip 4 chars
                             index += 4;
-                        } else {
+                        }
+                        else
+                        {
                             break;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     s += c;
                 }
 
             }
 
-            if (!complete) {
+            if (!complete)
+            {
                 return null;
             }
 
@@ -369,8 +436,10 @@ namespace AdColony {
         int GetLastIndexOfNumber(char[] json, int index)
         {
             int lastIndex;
-            for (lastIndex = index; lastIndex < json.Length; lastIndex++) {
-                if ("0123456789+-.eE".IndexOf(json[lastIndex]) == -1) {
+            for (lastIndex = index; lastIndex < json.Length; lastIndex++)
+            {
+                if ("0123456789+-.eE".IndexOf(json[lastIndex]) == -1)
+                {
                     break;
                 }
             }
@@ -379,8 +448,10 @@ namespace AdColony {
 
         void EatWhitespace(char[] json, ref int index)
         {
-            for (; index < json.Length; index++) {
-                if (" \t\n\r".IndexOf(json[index]) == -1) {
+            for (; index < json.Length; index++)
+            {
+                if (" \t\n\r".IndexOf(json[index]) == -1)
+                {
                     break;
                 }
             }
@@ -396,13 +467,15 @@ namespace AdColony {
         {
             EatWhitespace(json, ref index);
 
-            if (index == json.Length) {
+            if (index == json.Length)
+            {
                 return JsonToken.NONE;
             }
 
             char c = json[index];
             index++;
-            switch (c) {
+            switch (c)
+            {
                 case '{':
                     return JsonToken.CURLY_OPEN;
                 case '}':
@@ -415,8 +488,16 @@ namespace AdColony {
                     return JsonToken.COMMA;
                 case '"':
                     return JsonToken.STRING;
-                case '0': case '1': case '2': case '3': case '4':
-                case '5': case '6': case '7': case '8': case '9':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
                 case '-':
                     return JsonToken.NUMBER;
                 case ':':
@@ -427,34 +508,40 @@ namespace AdColony {
             int remainingLength = json.Length - index;
 
             // false
-            if (remainingLength >= 5) {
+            if (remainingLength >= 5)
+            {
                 if (json[index] == 'f' &&
                     json[index + 1] == 'a' &&
                     json[index + 2] == 'l' &&
                     json[index + 3] == 's' &&
-                    json[index + 4] == 'e') {
+                    json[index + 4] == 'e')
+                {
                     index += 5;
                     return JsonToken.FALSE;
                 }
             }
 
             // true
-            if (remainingLength >= 4) {
+            if (remainingLength >= 4)
+            {
                 if (json[index] == 't' &&
                     json[index + 1] == 'r' &&
                     json[index + 2] == 'u' &&
-                    json[index + 3] == 'e') {
+                    json[index + 3] == 'e')
+                {
                     index += 4;
                     return JsonToken.TRUE;
                 }
             }
 
             // null
-            if (remainingLength >= 4) {
+            if (remainingLength >= 4)
+            {
                 if (json[index] == 'n' &&
                     json[index + 1] == 'u' &&
                     json[index + 2] == 'l' &&
-                    json[index + 3] == 'l') {
+                    json[index + 3] == 'l')
+                {
                     index += 4;
                     return JsonToken.NULL;
                 }
@@ -465,11 +552,16 @@ namespace AdColony {
 
         bool SerializeObjectOrArray(object objectOrArray, StringBuilder builder)
         {
-            if (objectOrArray is Hashtable) {
+            if (objectOrArray is Hashtable)
+            {
                 return SerializeObject((Hashtable)objectOrArray, builder);
-            } else if (objectOrArray is ArrayList) {
+            }
+            else if (objectOrArray is ArrayList)
+            {
                 return SerializeArray((ArrayList)objectOrArray, builder);
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -480,17 +572,20 @@ namespace AdColony {
 
             IDictionaryEnumerator e = anObject.GetEnumerator();
             bool first = true;
-            while (e.MoveNext()) {
+            while (e.MoveNext())
+            {
                 string key = e.Key.ToString();
                 object value = e.Value;
 
-                if (!first) {
+                if (!first)
+                {
                     builder.Append(", ");
                 }
 
                 SerializeString(key, builder);
                 builder.Append(":");
-                if (!SerializeValue(value, builder)) {
+                if (!SerializeValue(value, builder))
+                {
                     return false;
                 }
 
@@ -506,14 +601,17 @@ namespace AdColony {
             builder.Append("[");
 
             bool first = true;
-            for (int i = 0; i < anArray.Count; i++) {
+            for (int i = 0; i < anArray.Count; i++)
+            {
                 object value = anArray[i];
 
-                if (!first) {
+                if (!first)
+                {
                     builder.Append(", ");
                 }
 
-                if (!SerializeValue(value, builder)) {
+                if (!SerializeValue(value, builder))
+                {
                     return false;
                 }
 
@@ -526,25 +624,44 @@ namespace AdColony {
 
         bool SerializeValue(object value, StringBuilder builder)
         {
-            if (value == null) {
+            if (value == null)
+            {
                 builder.Append("null");
-            } else if (value.GetType().IsArray) {
-                SerializeArray(new ArrayList((ICollection) value), builder);
-            } else if (value is string) {
+            }
+            else if (value.GetType().IsArray)
+            {
+                SerializeArray(new ArrayList((ICollection)value), builder);
+            }
+            else if (value is string)
+            {
                 SerializeString((string)value, builder);
-            } else if (value is Char) {
-                SerializeString(Convert.ToString((char) value), builder);
-            } else if (value is Hashtable) {
+            }
+            else if (value is Char)
+            {
+                SerializeString(Convert.ToString((char)value), builder);
+            }
+            else if (value is Hashtable)
+            {
                 SerializeObject((Hashtable)value, builder);
-            } else if (value is ArrayList) {
+            }
+            else if (value is ArrayList)
+            {
                 SerializeArray((ArrayList)value, builder);
-            } else if ((value is bool) && ((bool)value == true)) {
+            }
+            else if ((value is bool) && ((bool)value == true))
+            {
                 builder.Append("true");
-            } else if ((value is bool) && ((bool)value == false)) {
+            }
+            else if ((value is bool) && ((bool)value == false))
+            {
                 builder.Append("false");
-            } else if (value.GetType().IsPrimitive) {
+            }
+            else if (value.GetType().IsPrimitive)
+            {
                 SerializeNumber(Convert.ToDouble(value), builder);
-            } else {
+            }
+            else
+            {
                 return false;
             }
             return true;
@@ -555,27 +672,46 @@ namespace AdColony {
             builder.Append("\"");
 
             char[] charArray = aString.ToCharArray();
-            for (int i = 0; i < charArray.Length; i++) {
+            for (int i = 0; i < charArray.Length; i++)
+            {
                 char c = charArray[i];
-                if (c == '"') {
+                if (c == '"')
+                {
                     builder.Append("\\\"");
-                } else if (c == '\\') {
+                }
+                else if (c == '\\')
+                {
                     builder.Append("\\\\");
-                } else if (c == '\b') {
+                }
+                else if (c == '\b')
+                {
                     builder.Append("\\b");
-                } else if (c == '\f') {
+                }
+                else if (c == '\f')
+                {
                     builder.Append("\\f");
-                } else if (c == '\n') {
+                }
+                else if (c == '\n')
+                {
                     builder.Append("\\n");
-                } else if (c == '\r') {
+                }
+                else if (c == '\r')
+                {
                     builder.Append("\\r");
-                } else if (c == '\t') {
+                }
+                else if (c == '\t')
+                {
                     builder.Append("\\t");
-                } else {
+                }
+                else
+                {
                     int codepoint = Convert.ToInt32(c);
-                    if ((codepoint >= 32) && (codepoint <= 126)) {
+                    if ((codepoint >= 32) && (codepoint <= 126))
+                    {
                         builder.Append(c);
-                    } else {
+                    }
+                    else
+                    {
                         builder.Append("\\u" + Convert.ToString(codepoint, 16).PadLeft(4, '0'));
                     }
                 }

@@ -1,12 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
-namespace AdColony {
+namespace AdColony
+{
 
 
 
-    public interface IEventTracker {
+    public interface IEventTracker
+    {
         /// <summary>
         /// Report a transaction/purchase event.
         /// </summary>

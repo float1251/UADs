@@ -23,30 +23,33 @@ using UnityEditor;
 ///   There can be multiple dependency files like this one per project, the  resolver will combine them and process all
 /// of them at once.
 [InitializeOnLoad]
-public class ADCDependencies : AssetPostprocessor {
+public class ADCDependencies : AssetPostprocessor
+{
 #if UNITY_ANDROID
   /// <summary>Instance of the PlayServicesSupport resolver</summary>
   public static object svcSupport;
 #endif  // UNITY_ANDROID
 
-  /// Initializes static members of the class.
-  static ADCDependencies() {
-    RegisterDependencies();
-  }
+    /// Initializes static members of the class.
+    static ADCDependencies()
+    {
+        RegisterDependencies();
+    }
 
 
-  /// <summary>
-  /// Registers the dependencies needed by this plugin.
-  /// </summary>
-  public static void RegisterDependencies() {
+    /// <summary>
+    /// Registers the dependencies needed by this plugin.
+    /// </summary>
+    public static void RegisterDependencies()
+    {
 #if UNITY_ANDROID
     RegisterAndroidDependencies();
 #endif
-  }
+    }
 
-  /// <summary>
-  /// Registers the android dependencies.
-  /// </summary>
+    /// <summary>
+    /// Registers the android dependencies.
+    /// </summary>
 #if UNITY_ANDROID
   public static void RegisterAndroidDependencies() {
     // Setup the resolver using reflection as the module may not be

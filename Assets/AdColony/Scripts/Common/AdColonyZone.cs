@@ -1,11 +1,10 @@
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
-namespace AdColony {
-    public class Zone {
+namespace AdColony
+{
+    public class Zone
+    {
         /// <summary>
         /// Represents the given zone's unique string identifier.
         /// AdColony zone IDs can be created at the [Control Panel](http://clients.adcolony.com).
@@ -57,39 +56,51 @@ namespace AdColony {
         /// </summary>
         public string RewardName;
 
-        public Zone() {
+        public Zone()
+        {
         }
 
-        public Zone(Hashtable values) {
-            if (values != null) {
-                if (values.ContainsKey(Constants.ZoneIdentifierKey)) {
+        public Zone(Hashtable values)
+        {
+            if (values != null)
+            {
+                if (values.ContainsKey(Constants.ZoneIdentifierKey))
+                {
                     Identifier = values[Constants.ZoneIdentifierKey] as string;
                 }
-                if (values.ContainsKey(Constants.ZoneTypeKey)) {
+                if (values.ContainsKey(Constants.ZoneTypeKey))
+                {
                     Type = (AdZoneType)Convert.ToInt32(values[Constants.ZoneTypeKey]);
                 }
-                if (values.ContainsKey(Constants.ZoneEnabledKey)) {
-                    Enabled = Convert.ToBoolean(Convert.ToInt32 (values[Constants.ZoneEnabledKey]));
+                if (values.ContainsKey(Constants.ZoneEnabledKey))
+                {
+                    Enabled = Convert.ToBoolean(Convert.ToInt32(values[Constants.ZoneEnabledKey]));
                 }
-                if (values.ContainsKey(Constants.ZoneRewardedKey)) {
+                if (values.ContainsKey(Constants.ZoneRewardedKey))
+                {
                     Rewarded = Convert.ToBoolean(Convert.ToInt32(values[Constants.ZoneRewardedKey]));
                 }
-                if (values.ContainsKey(Constants.ZoneViewsPerRewardKey)) {
+                if (values.ContainsKey(Constants.ZoneViewsPerRewardKey))
+                {
                     ViewsPerReward = Convert.ToInt32(values[Constants.ZoneViewsPerRewardKey]);
                 }
-                if (values.ContainsKey(Constants.ZoneViewsUntilRewardKey)) {
+                if (values.ContainsKey(Constants.ZoneViewsUntilRewardKey))
+                {
                     ViewsUntilReward = Convert.ToInt32(values[Constants.ZoneViewsUntilRewardKey]);
                 }
-                if (values.ContainsKey(Constants.ZoneRewardAmountKey)) {
+                if (values.ContainsKey(Constants.ZoneRewardAmountKey))
+                {
                     RewardAmount = Convert.ToInt32(values[Constants.ZoneRewardAmountKey]);
                 }
-                if (values.ContainsKey(Constants.ZoneRewardNameKey)) {
+                if (values.ContainsKey(Constants.ZoneRewardNameKey))
+                {
                     RewardName = values[Constants.ZoneRewardNameKey] as string;
                 }
             }
         }
 
-        public string toJsonString() {
+        public string toJsonString()
+        {
             Hashtable data = new Hashtable();
             data.Add(Constants.ZoneIdentifierKey, Identifier);
             data.Add(Constants.ZoneTypeKey, Convert.ToInt32(Type).ToString());

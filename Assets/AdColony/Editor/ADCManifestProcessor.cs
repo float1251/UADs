@@ -1,21 +1,22 @@
-using System;
-using System.Text;
-using UnityEditor;
-using System.Linq;
-using UnityEngine;
 using System.IO;
+using UnityEditor;
+using UnityEngine;
 
-namespace AdColony.Editor {
+namespace AdColony.Editor
+{
     [InitializeOnLoad]
-    public static class ADCManifestProcessor {
+    public static class ADCManifestProcessor
+    {
         private const string templateManifest = "AndroidManifestTemplate.xml";
         private const string manifest = "AndroidManifest.xml";
 
-        static ADCManifestProcessor() {
+        static ADCManifestProcessor()
+        {
             Process();
         }
 
-        public static void CheckMinSDKVersion() {
+        public static void CheckMinSDKVersion()
+        {
 #if UNITY_ANDROID
             if (PlayerSettings.Android.minSdkVersion < ADCPluginInfo.RequiredAndroidVersion) {
                 UnityEngine.Debug.LogError("AdColony requires " + ADCPluginInfo.RequiredAndroidVersion + " in PlayerSettings");
@@ -23,7 +24,8 @@ namespace AdColony.Editor {
 #endif
         }
 
-        public static void Process() {
+        public static void Process()
+        {
 #if UNITY_ANDROID
             CheckMinSDKVersion();
 

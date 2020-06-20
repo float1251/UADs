@@ -5,45 +5,6 @@ using System.Collections.Generic;
 
 namespace AdColony
 {
-
-    /// <summary>
-    /// Main class for Ads within AdColony SDK
-    /// </summary>
-    /// <example>
-    /// <code>
-    ///    AdColony.InterstitialAd _ad = null;
-    ///    bool _configured = false;
-    ///
-    ///    void ConfigureAds() {
-    ///        AdColony.Ads.Configure("your_app_id", null, "your_zone_1", "your_zone_2");
-    ///
-    ///        AdColony.Ads.OnConfigurationCompleted += (List<AdColony.Zone> zones) => {
-    ////            if (zones == null || zones.Count <= 0) {
-    ////                _configured = false;
-    ///            } else {
-    ///                _configured = true;
-    ///            }
-    ///        };
-    ///
-    ///        AdColony.Ads.OnRequestInterstitial += (AdColony.InterstitialAd ad) => {
-    ///            _ad = ad;
-    ///        };
-    ///    }
-    ///
-    ///    void RequestAd() {
-    ///        if (_configured) {
-    ////            AdColony.Ads.RequestInterstitialAd("your_zone_1", null);
-    ////        }
-    ///    }
-    ////
-    ///    void PlayAd() {
-    ////        if (_ad != null) {
-    ///            AdColony.Ads.ShowAd(_ad);
-    ///        }
-    ///    }
-    /// </code>
-    /// </example>
-    /// 
     public class Ads : MonoBehaviour
     {
         // ------------------------------------Common API--------------------------------------
@@ -303,19 +264,19 @@ namespace AdColony
                     else
                     {
                         _sharedGameObject._sharedInstance = null;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
                         _sharedGameObject._sharedInstance = new AdsAndroid(singleton.name);
                         _sharedGameObject._eventTracker = new EventTrackerAndroid();
-        #elif UNITY_IOS
+#elif UNITY_IOS
                         _sharedGameObject._sharedInstance = new AdsIOS(singleton.name);
                         _sharedGameObject._eventTracker = new EventTrackerIOS();
-        #elif UNITY_WP8
+#elif UNITY_WP8
 
-        #elif UNITY_METRO
+#elif UNITY_METRO
 
-        #endif
+#endif
                     }
                 }
 
@@ -1055,12 +1016,6 @@ namespace AdColony
                 return;
             }
 
-            //string zoneId = "";
-            //if (values != null && values.ContainsKey("zone_id"))
-            //{
-            //    zoneId = values["zone_id"] as string;
-            //}
-
             if (Ads.OnAdViewFailedToLoad != null)
             {
                 Ads.OnAdViewFailedToLoad(adColonyAdView);
@@ -1133,7 +1088,7 @@ namespace AdColony
 
         public void _OnAdColonyAdViewLeftApplication(string paramJson)
         {
-            Debug.Log("AdColony.Wrapper._OnAdColonyAdViewLeftApplication called.");     
+            Debug.Log("AdColony.Wrapper._OnAdColonyAdViewLeftApplication called.");
             Hashtable values = (AdColonyJson.Decode(paramJson) as Hashtable);
             if (values == null)
             {
@@ -1191,10 +1146,22 @@ namespace AdColony
             }
         }
 
-        internal static void  DestroyAdView(string id)
+        internal static void DestroyAdView(string id)
         {
             Debug.Log("AdColony.Wrapper.DestroyAdView called.");
             SharedInstance.DestroyAdView(id);
+        }
+
+        internal static void ShowAdView(string id)
+        {
+            Debug.Log("AdColony.Wrapper.show called.");
+            SharedInstance.ShowAdView(id);
+        }
+
+        internal static void HideAdView(string id)
+        {
+            Debug.Log("AdColony.Wrapper.hide called.");
+            SharedInstance.HideAdView(id);
         }
 
         //------------------------------End Banner-------------------------------------------------------------------------
@@ -1237,5 +1204,7 @@ namespace AdColony
         void CancelAd(InterstitialAd ad);
         void DestroyAd(string id);
         void DestroyAdView(string id);
+        void ShowAdView(string id);
+        void HideAdView(string id);
     }
 }

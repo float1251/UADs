@@ -3,14 +3,15 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
-using System.Collections;
 using System.IO;
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;
 #endif
 
-namespace AdColony.Editor {
-    public class ADCPostBuildProcessor : MonoBehaviour {
+namespace AdColony.Editor
+{
+    public class ADCPostBuildProcessor : MonoBehaviour
+    {
 
 #if UNITY_CLOUD_BUILD
         public static void OnPostprocessBuildiOS(string exportPath) {
@@ -19,8 +20,10 @@ namespace AdColony.Editor {
 #endif
 
         [PostProcessBuildAttribute(1)]
-        public static void OnPostprocessBuild(BuildTarget buildTarget, string buildPath) {
-            if (buildTarget == BuildTarget.iOS) {
+        public static void OnPostprocessBuild(BuildTarget buildTarget, string buildPath)
+        {
+            if (buildTarget == BuildTarget.iOS)
+            {
 #if UNITY_IOS
                 Debug.Log("AdColony: OnPostprocessBuild");
                 UpdateProject(buildTarget, buildPath + "/Unity-iPhone.xcodeproj/project.pbxproj");
@@ -29,7 +32,8 @@ namespace AdColony.Editor {
             }
         }
 
-        private static void UpdateProject(BuildTarget buildTarget, string projectPath) {
+        private static void UpdateProject(BuildTarget buildTarget, string projectPath)
+        {
 #if UNITY_IOS
             PBXProject project = new PBXProject();
             project.ReadFromString(File.ReadAllText(projectPath));
@@ -62,7 +66,8 @@ namespace AdColony.Editor {
 #endif
         }
 
-        private static void UpdateProjectPlist(BuildTarget buildTarget, string plistPath) {
+        private static void UpdateProjectPlist(BuildTarget buildTarget, string plistPath)
+        {
 #if UNITY_IOS
             PlistDocument plist = new PlistDocument();
             plist.ReadFromString(File.ReadAllText(plistPath));

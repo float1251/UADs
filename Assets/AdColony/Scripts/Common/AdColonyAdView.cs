@@ -11,7 +11,7 @@ namespace AdColony
 
         // ---------------------------------------------------------------------------
 
-#region Internal Methods - do not call these
+        #region Internal Methods - do not call these
         public string Id;
 
         public AdColonyAdView(Hashtable values)
@@ -41,7 +41,8 @@ namespace AdColony
 
         private AdPosition getAdPosition(int position)
         {
-            switch (position) {
+            switch (position)
+            {
 
                 case 0:
                     return AdPosition.Top;
@@ -64,15 +65,29 @@ namespace AdColony
 
         ~AdColonyAdView()
         {
+            Debug.Log("AdColony.AdColonyAdView.Destructors called.");
             if (IsValid())
             {
                 Ads.SharedGameObject.EnqueueAction(() => { Ads.DestroyAd(Id); });
             }
         }
 
-        public void destroyAdView() {
+        public void DestroyAdView() 
+        {
             Debug.Log("AdColony.AdColonyAdView.DestroyAdView called.");
             Ads.DestroyAdView(Id);
+        }
+
+        public void ShowAdView()
+        {
+            Debug.Log("AdColony.AdColonyAdView.show called.");
+            Ads.ShowAdView(Id);
+        }
+
+        public void HideAdView()
+        {
+            Debug.Log("AdColony.AdColonyAdView.hide called.");
+            Ads.HideAdView(Id);
         }
 
         private bool IsValid()
@@ -80,6 +95,6 @@ namespace AdColony
             return !System.String.IsNullOrEmpty(Id);
         }
 
-#endregion
+        #endregion
     }
 }
