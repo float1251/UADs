@@ -70,7 +70,8 @@ namespace UAds.Editor {
             var array = rootDict.CreateArray("SKAdNetworkItems");
             foreach (var item in res) {
                 var dic = array.AddDict();
-                dic.SetString("SKAdNetworkIdentifier", item);
+                // 小文字じゃないとだめなそうなのでToLowerで小文字化.
+                dic.SetString("SKAdNetworkIdentifier", item.ToLower());
             }
             File.WriteAllText(plistPath, plist.WriteToString());
         }

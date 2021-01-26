@@ -19,6 +19,8 @@ namespace UAds.Sample
 #if UNITY_ADS
 			this.ads = new UAds.UADUnityAdsV2("", "", true);
 #elif UNITY_MONETIZATION
+            // Errorが出て動作しないです。 GameId等を設定する必要があります。
+            // Error while initializing Unity Services: empty game ID, halting Unity Ads init
             this.ads = new UAds.UAdUnityMonetization("", "", true);
 #endif
         }

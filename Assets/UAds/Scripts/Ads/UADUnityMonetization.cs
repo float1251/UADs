@@ -49,7 +49,7 @@ namespace UAds {
                 onFinish.Invoke(VideoAdStatus.AdNotReadyOrShowing);
                 yield break;
             }
-
+            this.onFinish = onFinish;
             ShowAd(onFinish);
         }
 
