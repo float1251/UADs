@@ -2,26 +2,36 @@
 using System.Collections;
 #if ENABLE_ADCOLONY
 using AdColony;
+
 #endif
 
 namespace UAds.Sample
 {
+    public class Settings
+    {
+        public string android_game_id;
+        public string ios_game_id;
+        public string android_ad_unit;
+        public string ios_ad_unit;
+    }
+
     public class SampleController : MonoBehaviour
     {
         UAds.IVideoAdvertisement ads;
 
-        [SerializeField]
-        StatusText status;
+        [SerializeField] StatusText status;
 
         public void OnClickUnityAds()
         {
             status.UpdateStatus("UnityAds Initialzie");
+            var json = Resources.Load<TextAsset>("settings");
+            var settings = JsonUtility.FromJson<Settings>(json.text);
 #if UNITY_ADS
 			this.ads = new UAds.UADUnityAdsV2("", "", true);
 #elif UNITY_MONETIZATION
             // Errorが出て動作しないです。 GameId等を設定する必要があります。
             // Error while initializing Unity Services: empty game ID, halting Unity Ads init
-            this.ads = new UAds.UAdUnityMonetization("", "", true);
+            this.ads = new UAds.UAdUnityMonetization(settings.android_game_id, settings.android_ad_unit, true);
 #endif
         }
 

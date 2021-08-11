@@ -39,3 +39,6 @@ sysinfo.txt
 .DS_Store
 /Dev-1.0-v1.symbols.zip
 /.idea/
+
+# 設定ファイル.
+settings.json

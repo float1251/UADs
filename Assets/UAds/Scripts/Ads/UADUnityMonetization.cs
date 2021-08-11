@@ -31,7 +31,7 @@ namespace UAds {
         public IEnumerator ShowRewardVideoAsync(OnFinishRewardVideo onFinish) {
             if (Advertisement.GetPlacementState(this.placementId) == PlacementState.Waiting) {
                 // 1秒くらい待ってみる.
-                int count = 10;
+                int count = 0;
                 while (count < 10 && !Advertisement.IsReady(this.placementId)) {
                     yield return new WaitForSecondsRealtime(0.1f);
                     count++;
@@ -75,7 +75,9 @@ namespace UAds {
             return false;
         }
 
-        private void ShowAd(OnFinishRewardVideo onFinish) {
+        private void ShowAd(OnFinishRewardVideo onFinish)
+        {
+            this.onFinish = onFinish;
             Advertisement.Show(this.placementId);
         }
 
